@@ -19,7 +19,7 @@ export type Night = {
   minimum: number
   taken: number
   pricePerSeat: number | null
-  cutoff: string // yyyy-mm-dd: if the minimum isn't met by then, the night is cancelled and nobody is charged
+  cutoff: string // decision date for Sergio's minimum-attendance review; no automatic cancellation is implied
   state: NightState
   sample: boolean
 }
@@ -43,6 +43,7 @@ export type BookingRequest = {
   phone: string
   contactBy: 'call' | 'text' | 'email'
   gift?: string
+  planning?: PlanningRequest
 }
 
 export type BookingStatus = 'pending-payment' | 'held' | 'reserved' | 'confirmed' | 'requested' | 'waitlisted'
@@ -81,18 +82,70 @@ export type BookingReceipt = {
   ref: string
   status: 'requested' | 'confirmed' | 'cancelled' | 'held'
   kind: Kind
-  date: string
-  time: string
-  guests: number
+  date: string | null
+  time: string | null
+  guests: number | null
   nightId?: string
   nightTitle?: string
   amount: null
   amountWhen: 'after-quote'
   createdAt: string
+  planning?: PlanningReceipt
+  nightMinimumState?: 'awaiting_minimum' | 'confirmed'
+  decisionDate?: string
 }
 export type PublicHoldResult = HoldResult & { next: 'done'; accessToken: string }
 export interface PublicBookingApi extends Omit<BookingApi, 'booking' | 'hold' | 'waitlist'> {
+  config(): Promise<PlanningConfig>
   hold(req: BookingRequest, honeypot?: string): Promise<PublicHoldResult>
   booking(ref: string): Promise<BookingReceipt | null>
+  cancel(ref: string, reason: string): Promise<BookingReceipt | null>
+  scheduleInterview(ref: string, slotId: string): Promise<BookingReceipt | null>
+  checkout(ref: string): Promise<{url: string; expiresAt?: string}>
   waitlist(nightId: string, email: string, honeypot?: string): Promise<void>
+}
+
+/** Server-owned settings. A missing amount is undecided, never a sample price. */
+export type PartyBand = { id: string; label: string; min: number; max: number; deposit: number | null }
+export type PlanningConfig = {
+  partyBands: PartyBand[]
+  planningFee: number | null
+  checkoutMinutes: number | null
+  postageAllowance: number | null
+  kitchenRequirements: string
+  travelMiles: number
+  maxGuests: number
+  interviewScheduling: 'undecided' | 'self_schedule' | 'sergio_arranges'
+  paymentReady: boolean
+  interviewSlots: { id: string; at: string; label?: string }[]
+  policyVersion: number
+}
+export type PlanningRequest = {
+  dateMode: 'exact' | 'flexible' | 'undecided'
+  dateFrom?: string
+  dateTo?: string
+  partyBandId: string
+  headcount: number | null
+  kitchen: string
+  budgetMode: 'range' | 'guidance'
+  budgetMin: number | null
+  budgetMax: number | null
+  budgetUnit: 'total' | 'per_person'
+  foodIdeas: string
+  allergies: string
+  physicalInvitations: boolean
+}
+export type PlanningReceipt = {
+  dateMode: PlanningRequest['dateMode']
+  partyBandLabel: string
+  interviewStatus: string
+  scheduledAt?: string | null
+  interviewAt?: string | null
+  meetUrl?: string | null
+  dateReserved: boolean
+  depositStatus: 'unpaid' | 'paid' | 'refund_pending' | 'refunded'
+  depositAmount: number | null
+  spendingCeiling: number | null
+  menu: string
+  followUpCount: number
 }

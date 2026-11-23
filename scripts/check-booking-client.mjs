@@ -247,6 +247,102 @@ try {
   await assert.rejects(closed.availability('dinner', '2026-12'), error => error.code === 'network')
   check('missing live configuration fails closed without a mock or network write', () => assert.equal(calls.length, beforeUnconfigured))
 
+  const planning = await actualModule('src/booking/planning.ts')
+  const config = { partyBands: [{id:'small',label:'1–6 guests',min:1,max:6,deposit:null},{id:'family',label:'7–12 guests',min:7,max:12,deposit:null}], planningFee:null,checkoutMinutes:null,postageAllowance:null,kitchenRequirements:'',travelMiles:75,maxGuests:24,interviewScheduling:'undecided',paymentReady:false,interviewSlots:[],policyVersion:1 }
+  const uncertain = { ...planning.EMPTY, kind:'dinner', dateMode:'undecided', partyBandId:'family', name:'Graduation host', email:'host@example.test', foodIdeas:'Cordon bleu ideas' }
+  const validation = {openTimes:[],availabilityLoaded:false,seatsMax:6,today:'2026-11-23'}
+  check('an undecided date and exact headcount can become interview questions without fake values', () => {
+    assert.deepEqual(planning.validatePlanningStep(uncertain,1,config,validation),{})
+    const request = planning.planningRequest(uncertain)
+    assert(!Object.hasOwn(request,'date'))
+    assert(!Object.hasOwn(request,'time'))
+    assert.equal(request.guests,undefined)
+    assert.equal(request.planning.headcount,null)
+    assert.equal(request.planning.dateMode,'undecided')
+    assert.equal(request.planning.foodIdeas,'Cordon bleu ideas')
+  })
+  check('party-size band is required even while the exact headcount remains open', () => {
+    assert(planning.validatePlanningStep({...uncertain,partyBandId:''},1,config,validation).partyBand)
+    assert(planning.validatePlanningStep({...uncertain,partyBandId:'unknown-band'},1,config,validation).partyBand)
+    assert(planning.validatePlanningStep({...uncertain,headcountMode:'exact',guests:20},1,config,validation).guests)
+  })
+  check('an exact date must still be available and its chosen time current', () => {
+    const exact = {...uncertain,dateMode:'exact',date:'2026-12-20',time:'18:00',headcountMode:'exact',guests:8}
+    assert(planning.validatePlanningStep(exact,1,config,validation).date)
+    assert(planning.validatePlanningStep(exact,1,config,{...validation,availabilityLoaded:true,openTimes:['19:00']}).time)
+    assert.deepEqual(planning.validatePlanningStep(exact,1,config,{...validation,availabilityLoaded:true,openTimes:['18:00']}),{})
+  })
+  check('flexible ranges reject past and reversed dates without requiring an invented range', () => {
+    assert.deepEqual(planning.validatePlanningStep({...uncertain,dateMode:'flexible'},1,config,validation),{})
+    const invalid = planning.validatePlanningStep({...uncertain,dateMode:'flexible',dateFrom:'2026-11-22',dateTo:'2026-11-21'},1,config,validation)
+    assert(invalid.dateFrom);assert(invalid.dateTo)
+  })
+  check('budget guidance clears stale price guesses and ranges require a valid upper bound', () => {
+    const guidance = planning.planningRequest({...uncertain,budgetMin:'100',budgetMax:'1000'})
+    assert.equal(guidance.planning.budgetMin,null);assert.equal(guidance.planning.budgetMax,null)
+    assert(planning.validatePlanningStep({...uncertain,budgetMode:'range',budgetMin:'1000',budgetMax:'100'},2,config,validation).budgetMax)
+    assert.deepEqual(planning.validatePlanningStep({...uncertain,budgetMode:'range',budgetMin:'100',budgetMax:'1000'},2,config,validation),{})
+  })
+  check('email contact does not force a second contact channel, while calls and texts need a phone', () => {
+    assert.deepEqual(planning.validatePlanningStep(uncertain,3,config,validation),{})
+    assert(planning.validatePlanningStep({...uncertain,contactBy:'call'},3,config,validation).phone)
+    assert(planning.validatePlanningStep({...uncertain,contactBy:'text'},3,config,validation).phone)
+    assert.deepEqual(planning.validatePlanningStep({...uncertain,contactBy:'call',phone:'4075550100'},3,config,validation),{})
+  })
+  check('unknown settings stop submission rather than creating sample pricing or a local booking', () => {
+    assert(planning.validatePlanningStep(uncertain,1,null,validation).config)
+    assert(planning.validatePlanningStep(uncertain,3,null,validation).config)
+    assert.equal(planning.selectedBand(uncertain,config).deposit,null)
+  })
+  check('versioned drafts retain unanswered topics and reject malformed or stale storage', () => {
+    const valid = {version:2,savedAt:new Date().toISOString(),step:2,s:uncertain}
+    assert(planning.validDraft(valid))
+    assert(!planning.validDraft({...valid,version:1}))
+    assert(!planning.validDraft({...valid,savedAt:'2020-01-01T00:00:00Z'}))
+    assert(!planning.validDraft({...valid,s:{...uncertain,dateMode:'made-up'}}))
+    assert(!planning.validDraft({...valid,s:{...uncertain,foodIdeas:'x'.repeat(2001)}}))
+  })
+  check('legacy saved requests migrate their real answers without inventing the new planning fields', () => {
+    const old = {savedAt:new Date().toISOString(),step:2,s:{kind:'dinner',date:'2026-12-20',time:'18:00',guests:8,where:'home',place:'Winter Park',occasion:'Graduation',dishes:['Cordon bleu'],dietary:[],notes:'Family gathering',name:'Graduation host',email:'host@example.test',phone:'4075550100',contactBy:'email',gift:'',seats:2}}
+    const restored=planning.migrateLegacyDraft(old)
+    assert(restored)
+    assert.equal(restored.s.foodIdeas,'Cordon bleu')
+    assert.equal(restored.s.place,'Winter Park')
+    assert.equal(restored.s.guests,8)
+    assert.equal(restored.s.partyBandId,'')
+    assert.equal(restored.s.budgetMode,'guidance')
+    assert.equal(restored.s.kitchen,'')
+    assert.equal(planning.migrateLegacyDraft({...old,s:{...old.s,date:'invalid'}}),null)
+  })
+  const actionApi = (await actualModule('src/booking/api.ts','https://actions.example.test')).api
+  browser('#access=action-private-token')
+  let lostCancellation = true
+  globalThis.fetch = async (url,options) => {
+    const entry=observed(url,options);writeBoundary(entry)
+    if(lostCancellation){lostCancellation=false;throw new TypeError('Reply lost')}
+    return Response.json({...receipt,status:'cancelled'})
+  }
+  await assert.rejects(actionApi.cancel(receipt.ref,'Plans changed'))
+  const cancellationId=calls.at(-1).body.requestId
+  await actionApi.cancel(receipt.ref,'Plans changed')
+  check('cancellation retries carry private access in the body and retain one mutation identity', () => {
+    const entry=calls.at(-1)
+    assert.equal(entry.url,'https://actions.example.test/api/booking/cancel')
+    assert.equal(entry.body.requestId,cancellationId)
+    assert.equal(entry.body.accessToken,'action-private-token')
+    assert.equal(entry.body.reason,'Plans changed')
+    assert(!entry.url.includes('action-private-token'))
+  })
+  globalThis.fetch=async(url,options)=>{observed(url,options);return Response.json({url:'https://attacker.example.test/pay'})}
+  await assert.rejects(actionApi.checkout(receipt.ref),error=>error.code==='network')
+  const checkoutId=calls.at(-1).body.requestId
+  globalThis.fetch=async(url,options)=>{observed(url,options);return Response.json({url:'https://checkout.stripe.com/c/pay/contract-check',expiresAt:'2026-12-20T18:00:00Z'})}
+  const checkout=await actionApi.checkout(receipt.ref)
+  check('checkout accepts only the payment provider host and keeps invalid replies recoverable', () => {
+    assert.equal(calls.at(-1).body.requestId,checkoutId)
+    assert(checkout.url.startsWith('https://checkout.stripe.com/'))
+  })
+
   const { ics } = await actualModule('src/booking/format.ts')
   check('unconfirmed, held and cancelled requests do not become calendar appointments', () => {
     for (const status of ['requested', 'held', 'cancelled']) assert.equal(ics({ ...receipt, status }), null)

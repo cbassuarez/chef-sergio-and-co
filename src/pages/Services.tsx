@@ -251,9 +251,10 @@ export function SergiosTable() {
 export function Book() {
   return (
     <section className="wrap py-10 md:py-16">
-      <h1 className="text-4xl sm:text-5xl">Check your date</h1>
+      <p className="booking-eyebrow">Your next gathering</p>
+      <h1 className="mt-3 text-4xl sm:text-5xl">Book with Sergio</h1>
       <p className="mt-3 max-w-prose text-lg text-ink-muted">
-        Four short steps: choose an available date, tell Sergio what you have in mind, and send your request. No payment is taken and the date is confirmed only after Sergio reviews it. Prefer to talk?{' '}
+        Start with what you know. Share your gathering, your people and your ideas; Sergio will help settle the rest in a personal conversation. Prefer to talk?{' '}
         <a href={site.phoneHref} className="link">
           Call {site.phone}
         </a>

@@ -1,5 +1,5 @@
 import { booking } from '../content/booking'
-import { BookingError, type BookingReceipt, type PublicBookingApi, type PublicHoldResult } from './types'
+import { BookingError, type BookingReceipt, type PublicBookingApi, type PublicHoldResult, type PlanningConfig } from './types'
 
 // A failed or missing live service never creates a browser-only booking.
 export const IS_MOCK = false
@@ -59,6 +59,11 @@ async function call<T>(path: string, body?: unknown, allowNull = false): Promise
   return data as T
 }
 export const api: PublicBookingApi = {
+  async config() {
+    const result = await call<PlanningConfig>('/api/planning-config')
+    if (!result || !Array.isArray(result.partyBands) || !result.partyBands.length || typeof result.paymentReady !== 'boolean' || !Number.isInteger(result.maxGuests) || !Array.isArray(result.interviewSlots) || result.partyBands.some(band => !band || typeof band.id !== 'string' || typeof band.label !== 'string' || !Number.isInteger(band.min) || !Number.isInteger(band.max) || band.min < 1 || band.max < band.min || band.deposit !== null && (typeof band.deposit !== 'number' || !Number.isFinite(band.deposit) || band.deposit < 0))) throw new BookingError('network', 'The booking settings were incomplete. Please reload them or call Sergio.')
+    return result
+  },
   availability: (kind, month) => call(`/api/availability?type=${encodeURIComponent(kind)}&month=${encodeURIComponent(month)}`),
   nights: () => call('/api/nights'),
   async hold(request, honeypot = '') {
@@ -73,6 +78,40 @@ export const api: PublicBookingApi = {
     const accessToken = receiptAccess(ref)
     if (!ref || !accessToken) return null
     return call<BookingReceipt | null>('/api/booking/status', { ref, accessToken }, true)
+  },
+  async cancel(ref, reason) {
+    const accessToken = receiptAccess(ref)
+    if (!ref || !accessToken) throw new BookingError('invalid', 'Open your complete private booking link first.')
+    const payload = { ref, accessToken, reason }, attempt = await requestId('cancel', payload)
+    const result = await call<BookingReceipt | null>('/api/booking/cancel', { ...payload, requestId: attempt.value })
+    if (!result || result.ref !== ref || result.status !== 'cancelled') throw new BookingError('network', 'Your cancellation receipt was incomplete. Retry to recover its status.')
+    completeAttempt(attempt)
+    return result
+  },
+  async scheduleInterview(ref, slotId) {
+    const accessToken = receiptAccess(ref)
+    if (!ref || !accessToken) throw new BookingError('invalid', 'Open your complete private booking link first.')
+    const payload = { ref, accessToken, slotId }, attempt = await requestId('interview', payload)
+    const result = await call<BookingReceipt | null>('/api/booking/interview', { ...payload, requestId: attempt.value })
+    if (!result || result.ref !== ref || !result.planning) throw new BookingError('network', 'Your interview receipt was incomplete. Retry to recover its status.')
+    completeAttempt(attempt)
+    return result
+  },
+  async checkout(ref) {
+    const accessToken = receiptAccess(ref)
+    if (!ref || !accessToken) throw new BookingError('invalid', 'Open your complete private booking link first.')
+    const payload = { ref, accessToken }, attempt = await requestId('checkout', payload)
+    let result: {url: string; expiresAt?: string}
+    try { result = await call<{url: string; expiresAt?: string}>('/api/booking/checkout', { ...payload, requestId: attempt.value }) } catch (error) {
+      if (error instanceof BookingError && /previous checkout ended/.test(error.message)) { completeAttempt(attempt); attempts.delete(attempt.key) }
+      throw error
+    }
+    let url: URL
+    try { url = new URL(result.url) } catch { throw new BookingError('network', 'The payment link could not be verified. Please retry.') }
+    if (url.protocol !== 'https:' || url.hostname !== 'checkout.stripe.com' || url.username || url.password) throw new BookingError('network', 'The payment link could not be verified. Please contact Sergio.')
+    completeAttempt(attempt)
+    attempts.delete(attempt.key)
+    return result
   },
   async waitlist(nightId, email, honeypot = '') {
     const request = { nightId, email: email.trim() }, attempt = await requestId('waitlist', request)

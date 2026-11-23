@@ -8,6 +8,7 @@ import { About } from './pages/About'
 import { about } from './content/about'
 import { ShotList } from './pages/ShotList'
 import { BookDone, MockCheckout } from './booking/StatusPages'
+import { EventInvitation } from './booking/EventInvitation'
 
 export type Route = {
   path: string
@@ -93,6 +94,7 @@ const service = (name: string, path: string, description: string, from: number |
 })
 
 const all: Route[] = [
+  { path: '/invitation/', title: 'Your invitation | Chef Sergio & Co.', description: 'Your private invitation to a gathering with Chef Sergio.', h1: 'Your invitation', Page: EventInvitation, noindex: true, og: { card: 'home' } },
   {
     path: '/',
     title: 'Private chef in Orlando, FL | Chef Sergio & Co.',
@@ -134,10 +136,10 @@ const all: Route[] = [
   },
   {
     path: '/book/',
-    title: 'Book a private chef in Orlando | Chef Sergio & Co.',
+    title: 'Book with Sergio | Chef Sergio & Co.',
     noindex: true,
-    description: 'Choose a date from Sergio’s saved availability and send a request for a private dinner, cooking class or small event. No payment is taken online.',
-    h1: 'Check your date',
+    description: 'Plan a private dinner, cooking class or small celebration with Sergio. Share what you know and clarify the rest together.',
+    h1: 'Book with Sergio',
     Page: Book,
     og: { card: 'Pick a date. Send a request. Plan the menu together.' },
   },
