@@ -4,11 +4,34 @@ import { BookingError, type BookingReceipt, type PublicBookingApi, type PublicHo
 // A failed or missing live service never creates a browser-only booking.
 export const IS_MOCK = false
 const attempts = new Map<string, string>()
-function requestId(operation: string, payload: unknown) {
-  const key = operation + JSON.stringify(payload)
+function serviceBase() {
+  const base = booking.apiBase?.replace(/\/$/, '')
+  if (!base) throw new BookingError('network', 'Online requests are unavailable. Please call Sergio to discuss your date.')
+  return base
+}
+async function requestId(operation: string, payload: unknown) {
+  const origin = new URL(serviceBase()).origin
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(payload)))
+  const hash = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('')
+  // Persist retry metadata only; the guest's details already live in the form's draft.
+  const key = `booking-pending:v1:${encodeURIComponent(origin)}:${operation}:${hash}`
   let value = attempts.get(key)
-  if (!value) { value = crypto.randomUUID(); attempts.set(key, value) }
+  if (!value) {
+    try {
+      const pending = localStorage.getItem(key)
+      if (pending && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(pending)) value = pending
+    } catch { /* With storage blocked, retries in this page still use the module cache. */ }
+    value ??= crypto.randomUUID()
+    attempts.set(key, value)
+    try { localStorage.setItem(key, value) } catch { /* Saving retry metadata is optional. */ }
+  }
   return { key, value }
+}
+function completeAttempt(attempt: { key: string; value: string }) {
+  try {
+    // A completion in one tab must not remove another tab's newer pending attempt.
+    if (localStorage.getItem(attempt.key) === attempt.value) localStorage.removeItem(attempt.key)
+  } catch { /* A valid server receipt remains valid when storage is unavailable. */ }
 }
 function rememberAccess(ref: string, accessToken: string) {
   try { sessionStorage.setItem('booking-access:' + ref, accessToken) } catch { /* The URL fragment still grants access for this page. */ }
@@ -20,8 +43,7 @@ function receiptAccess(ref: string) {
   try { return sessionStorage.getItem('booking-access:' + ref) || '' } catch { return '' }
 }
 async function call<T>(path: string, body?: unknown, allowNull = false): Promise<T> {
-  const base = booking.apiBase?.replace(/\/$/, '')
-  if (!base) throw new BookingError('network', 'Online requests are unavailable. Please call Sergio to discuss your date.')
+  const base = serviceBase()
   let response: Response
   const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 20000)
   try {
@@ -40,10 +62,11 @@ export const api: PublicBookingApi = {
   availability: (kind, month) => call(`/api/availability?type=${encodeURIComponent(kind)}&month=${encodeURIComponent(month)}`),
   nights: () => call('/api/nights'),
   async hold(request, honeypot = '') {
-    const attempt = requestId('request:', request)
+    const attempt = await requestId('request', request)
     const result = await call<PublicHoldResult>(request.kind === 'event' ? '/api/request' : '/api/hold', { request, requestId: attempt.value, honeypot })
-    if (!result.ref || !result.accessToken || result.next !== 'done' || typeof result.url !== 'string') throw new BookingError('network', 'The request receipt was incomplete. Retry to recover the same request, or call Sergio.')
+    if (typeof result.ref !== 'string' || !result.ref || typeof result.accessToken !== 'string' || !result.accessToken || result.next !== 'done' || typeof result.url !== 'string' || !result.url) throw new BookingError('network', 'The request receipt was incomplete. Retry to recover the same request, or call Sergio.')
     rememberAccess(result.ref, result.accessToken)
+    completeAttempt(attempt)
     return result
   },
   async booking(ref) {
@@ -52,7 +75,9 @@ export const api: PublicBookingApi = {
     return call<BookingReceipt | null>('/api/booking/status', { ref, accessToken }, true)
   },
   async waitlist(nightId, email, honeypot = '') {
-    const request = { nightId, email: email.trim() }, attempt = requestId('waitlist:', request)
-    await call('/api/waitlist', { ...request, requestId: attempt.value, honeypot })
+    const request = { nightId, email: email.trim() }, attempt = await requestId('waitlist', request)
+    const result = await call<{ ok?: unknown }>('/api/waitlist', { ...request, requestId: attempt.value, honeypot })
+    if (result?.ok !== true) throw new BookingError('network', 'The waitlist acknowledgment was incomplete. Retry to recover the same request, or call Sergio.')
+    completeAttempt(attempt)
   },
 }

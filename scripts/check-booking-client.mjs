@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 import { build } from 'esbuild'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
-const savedGlobals = Object.fromEntries(['fetch', 'window', 'sessionStorage', 'setTimeout', 'clearTimeout'].map(key => [key, globalThis[key]]))
+const savedGlobals = Object.fromEntries(['fetch', 'window', 'sessionStorage', 'localStorage', 'setTimeout', 'clearTimeout'].map(key => [key, globalThis[key]]))
 if (!globalThis.crypto) globalThis.crypto = webcrypto
 let checks = 0
 function check(name, assertion) { assertion(); checks++; process.stdout.write(`PASS ${name}\n`) }
@@ -25,10 +25,12 @@ const receipt = { ref: 'CS-contract-check', status: 'requested', kind: 'dinner',
 const request = { kind: 'dinner', date: receipt.date, time: receipt.time, guests: receipt.guests, name: 'Contract check', email: 'check@example.test', phone: '4075550100', contactBy: 'email' }
 const result = { ref: receipt.ref, next: 'done', url: `https://pages.example.test/book/done/?ref=${receipt.ref}#access=contract-token`, accessToken: 'contract-token' }
 const memory = new Map()
+const pendingMemory = new Map()
 const calls = []
 function browser(hash = '') {
   globalThis.window = { location: { hash } }
   globalThis.sessionStorage = { getItem: key => memory.get(key) ?? null, setItem: (key, value) => memory.set(key, String(value)) }
+  globalThis.localStorage = { getItem: key => pendingMemory.get(key) ?? null, setItem: (key, value) => pendingMemory.set(key, String(value)), removeItem: key => pendingMemory.delete(key) }
 }
 function observed(url, options) {
   const entry = { url: String(url), options, body: options.body ? JSON.parse(options.body) : undefined }
@@ -115,19 +117,119 @@ try {
     assert.equal(calls.at(-1).body.honeypot, '')
   })
 
+  const reloadBase = 'https://reload.example.test'
+  const beforeReload = (await actualModule('src/booking/api.ts', reloadBase)).api
+  const reloadCommits = new Map()
+  let loseReloadResponse = true
+  globalThis.fetch = async (url, options) => {
+    const entry = observed(url, options); writeBoundary(entry)
+    if (!reloadCommits.has(entry.body.requestId)) reloadCommits.set(entry.body.requestId, result)
+    if (loseReloadResponse) { loseReloadResponse = false; throw new TypeError('Reply lost before page reload') }
+    return Response.json(reloadCommits.get(entry.body.requestId))
+  }
+  await assert.rejects(beforeReload.hold(request), error => error.code === 'network')
+  const reloadId = calls.at(-1).body.requestId
+  const pendingKey = [...pendingMemory.keys()].find(key => pendingMemory.get(key) === reloadId)
+  const persisted = JSON.stringify([pendingKey, pendingMemory.get(pendingKey)])
+  const afterReload = (await actualModule('src/booking/api.ts', reloadBase)).api
+  await afterReload.hold(request)
+  check('a fresh module recovers a lost-reply request without persisting guest details', () => {
+    assert.equal(reloadCommits.size, 1)
+    assert.equal(calls.at(-1).body.requestId, reloadId)
+    assert.match(pendingKey, /^booking-pending:v1:https%3A%2F%2Freload\.example\.test:request:[a-f0-9]{64}$/)
+    assert(!persisted.includes(request.name))
+    assert(!persisted.includes(request.email))
+    assert(!persisted.includes(request.phone))
+    assert.equal(pendingMemory.has(pendingKey), false)
+  })
+  const newIntent = (await actualModule('src/booking/api.ts', reloadBase)).api
+  await newIntent.hold(request)
+  check('a completed request clears pending metadata so a fresh module can start a new intent', () => {
+    assert.notEqual(calls.at(-1).body.requestId, reloadId)
+    assert.equal(reloadCommits.size, 2)
+    assert.equal(pendingMemory.has(pendingKey), false)
+  })
+
+  globalThis.fetch = async (url, options) => { observed(url, options); throw new TypeError('Keep both attempts pending') }
+  const left = (await actualModule('src/booking/api.ts', 'https://left.example.test')).api
+  const right = (await actualModule('src/booking/api.ts', 'https://right.example.test')).api
+  await assert.rejects(left.hold(request))
+  const leftId = calls.at(-1).body.requestId
+  await assert.rejects(right.hold(request))
+  const rightId = calls.at(-1).body.requestId
+  const freshLeft = (await actualModule('src/booking/api.ts', 'https://left.example.test')).api
+  await assert.rejects(freshLeft.hold(request))
+  check('pending identities are isolated by API origin and recover only their own request', () => {
+    assert.notEqual(leftId, rightId)
+    assert.equal(calls.at(-1).body.requestId, leftId)
+    assert([...pendingMemory.keys()].some(key => key.includes(encodeURIComponent('https://left.example.test') + ':request:')))
+    assert([...pendingMemory.keys()].some(key => key.includes(encodeURIComponent('https://right.example.test') + ':request:')))
+  })
+
+  const normalStorage = globalThis.localStorage
+  globalThis.localStorage = { getItem() { throw new Error('Storage blocked') }, setItem() { throw new Error('Storage blocked') }, removeItem() { throw new Error('Storage blocked') } }
+  try {
+    const blockedStorage = (await actualModule('src/booking/api.ts', 'https://blocked.example.test')).api
+    let lost = true
+    globalThis.fetch = async (url, options) => {
+      observed(url, options)
+      if (lost) { lost = false; throw new TypeError('Reply lost') }
+      return Response.json(result)
+    }
+    await assert.rejects(blockedStorage.hold(request), error => error.code === 'network')
+    const firstId = calls.at(-1).body.requestId
+    await blockedStorage.hold(request)
+    check('blocked browser storage preserves safe same-page retry behavior', () => assert.equal(calls.at(-1).body.requestId, firstId))
+  } finally { globalThis.localStorage = normalStorage }
+
+  const acknowledgmentBase = 'https://acknowledgment.example.test'
+  const acknowledgmentApi = (await actualModule('src/booking/api.ts', acknowledgmentBase)).api
+  let firstAckId
+  for (const acknowledgment of [{}, { ok: false }, { ok: 'true' }, [], true, null]) {
+    globalThis.fetch = async (url, options) => { const entry = observed(url, options); firstAckId ??= entry.body.requestId; return Response.json(acknowledgment) }
+    await assert.rejects(acknowledgmentApi.waitlist('night-acknowledgment', 'check@example.test'), error => error.code === 'network')
+    assert.equal(calls.at(-1).body.requestId, firstAckId)
+  }
+  const acknowledgmentKey = [...pendingMemory.keys()].find(key => pendingMemory.get(key) === firstAckId)
+  assert(acknowledgmentKey?.includes(':waitlist:'))
+  const recoveredWaitlist = (await actualModule('src/booking/api.ts', acknowledgmentBase)).api
+  globalThis.fetch = async (url, options) => { observed(url, options); return Response.json({ ok: true }) }
+  await recoveredWaitlist.waitlist('night-acknowledgment', 'check@example.test')
+  check('malformed waitlist acknowledgments fail closed and preserve recovery until ok:true', () => {
+    assert.equal(calls.at(-1).body.requestId, firstAckId)
+    assert.equal(pendingMemory.has(acknowledgmentKey), false)
+  })
+
+  const incompleteBase = 'https://incomplete.example.test'
+  const incomplete = (await actualModule('src/booking/api.ts', incompleteBase)).api
+  globalThis.fetch = async (url, options) => { observed(url, options); return Response.json({ ...result, accessToken: '' }) }
+  await assert.rejects(incomplete.hold(request), error => error.code === 'network')
+  const incompleteId = calls.at(-1).body.requestId
+  const incompleteKey = [...pendingMemory.keys()].find(key => pendingMemory.get(key) === incompleteId)
+  assert(incompleteKey)
+  globalThis.fetch = async (url, options) => { observed(url, options); return Response.json(result) }
+  await (await actualModule('src/booking/api.ts', incompleteBase)).api.hold(request)
+  check('an incomplete booking receipt remains recoverable across reload until valid success', () => {
+    assert.equal(calls.at(-1).body.requestId, incompleteId)
+    assert.equal(pendingMemory.has(incompleteKey), false)
+  })
+
   globalThis.fetch = async (url, options) => { observed(url, options); return Response.json({ error: { code: 'seats-gone', message: 'These seats are no longer available.' } }, { status: 409 }) }
   await assert.rejects(api.hold({ ...request, kind: 'table', nightId: 'night-full', seats: 2 }), error => error.code === 'seats-gone' && error.message === 'These seats are no longer available.')
   checks++; process.stdout.write('PASS authoritative availability conflicts reach the form as booking errors\n')
 
   const timeoutApi = (await actualModule('src/booking/api.ts', 'https://timeout.example.test')).api
-  let fireTimeout, timeoutCleared = false, timeoutDelay
+  let fireTimeout, timeoutCleared = false, timeoutDelay, markStarted
+  const networkStarted = new Promise(resolve => { markStarted = resolve })
   globalThis.setTimeout = (callback, delay) => { fireTimeout = callback; timeoutDelay = delay; return 1 }
   globalThis.clearTimeout = () => { timeoutCleared = true }
   globalThis.fetch = (url, options) => {
     observed(url, options)
+    markStarted()
     return new Promise((resolve, reject) => options.signal.addEventListener('abort', () => reject(new DOMException('Timed out', 'AbortError')), { once: true }))
   }
   const timedOut = timeoutApi.hold(request)
+  await networkStarted
   check('requests have a bounded abort timeout', () => { assert.equal(timeoutDelay, 20000); assert.equal(typeof fireTimeout, 'function') })
   fireTimeout()
   await assert.rejects(timedOut, error => error.code === 'network')

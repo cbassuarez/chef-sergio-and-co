@@ -299,9 +299,9 @@ export function BookingForm() {
       if (s.dietary.length>20 || s.dishes.length>20) e.notes='Choose no more than 20 food preferences or dietary requirements.'
     }
     if (i === 3) {
-      if (!s.name.trim() || s.name.length>150) e.name = 'Enter your name.'
+      if (s.name.trim().length<2 || s.name.length>150) e.name = 'Enter your name using at least 2 characters.'
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim()) || s.email.length>254) e.email = 'Enter an email address like name@example.com.'
-      if (s.phone.replace(/\D/g, '').length < 10 || s.phone.length>60) e.phone = 'Enter a 10-digit phone number.'
+      if (s.phone.replace(/\D/g, '').length < 10 || s.phone.length>40) e.phone = 'Enter a 10-digit phone number using no more than 40 characters.'
     }
     setErrors(e)
     const first = Object.keys(e)[0]
@@ -514,6 +514,7 @@ export function BookingForm() {
               <>
                 <div id="wrap-f-date">
                   <p className="font-medium">Date</p>
+                  <p className="mt-1 text-sm text-ink-muted">Please request at least one week ahead. Two weeks’ notice is preferred.</p>
                   {suggested && s.date && (
                     <p id="f-date-hint" className="text-sm text-ink-muted">
                       Suggested from the month you picked. Choose another day if you prefer.
@@ -632,13 +633,13 @@ export function BookingForm() {
               <>
                 <MenuCard data={card} className="mb-4 lg:hidden" />
                 <Field id="f-name" label="Your name" error={errors.name}>
-                  <input id="f-name" maxLength={150} autoComplete="name" value={s.name} onChange={(e) => set({ name: e.target.value })} aria-invalid={!!errors.name} className={inputCls} />
+                  <input id="f-name" minLength={2} maxLength={150} autoComplete="name" value={s.name} onChange={(e) => set({ name: e.target.value })} aria-invalid={!!errors.name} className={inputCls} />
                 </Field>
                 <Field id="f-email" label="Email" error={errors.email}>
                   <input id="f-email" type="email" maxLength={254} autoComplete="email" value={s.email} onChange={(e) => set({ email: e.target.value })} aria-invalid={!!errors.email} className={inputCls} />
                 </Field>
                 <Field id="f-phone" label="Phone" error={errors.phone}>
-                  <input id="f-phone" type="tel" maxLength={60} autoComplete="tel" value={s.phone} onChange={(e) => set({ phone: e.target.value })} aria-invalid={!!errors.phone} className={inputCls} />
+                  <input id="f-phone" type="tel" maxLength={40} autoComplete="tel" value={s.phone} onChange={(e) => set({ phone: e.target.value })} aria-invalid={!!errors.phone} className={inputCls} />
                 </Field>
                 <fieldset>
                   <legend className="font-medium">Best way to reach you</legend>
