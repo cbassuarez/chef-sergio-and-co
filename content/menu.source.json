@@ -1,0 +1,20 @@
+{
+  "_about": "Source of truth for the menu shown on the site. Captured verbatim from the live chefsergioandco.com on 2026-11-22. The site may only render items listed in `named`. scripts/check-menu.mjs fails the build on any difference. To change the menu, Sergio edits THIS file (or sends his real menu and it replaces this file).",
+  "captured": "2026-11-22",
+  "named": [
+    { "name": "Seafood Vol-au-Vent", "source": "alt text of catering gallery image 9ed3b8_ec5076f4…", "page": "/catering" },
+    { "name": "Lobster Bisque", "source": "printed label in buffet image 9ed3b8_90e06c5e…", "page": "/catering" },
+    { "name": "Seafood Paella", "source": "printed label in buffet image 9ed3b8_90e06c5e…", "page": "/catering" },
+    { "name": "Beef Stroganoff", "source": "printed label in buffet image 9ed3b8_90e06c5e…", "page": "/catering" },
+    { "name": "Thai Chicken Curry", "source": "printed label in buffet image 9ed3b8_90e06c5e…", "page": "/catering" }
+  ],
+  "unnamed_in_photos_ask_sergio": [
+    "Beef filet, peppercorn sauce, seared potato rounds (catering b15169, home 3edc51, about 3bc78b)",
+    "White fish with almond crust, green grapes, chard rolls (catering 580838)",
+    "Seared scallops on purée (catering 405c26)",
+    "Shrimp cocktail cups; tomato bruschetta; cheese board (catering 405c26)",
+    "Chicken in a creamy pepper sauce (catering 5cb8f4)",
+    "Beef filet with mashed potato and carrots (home 3edc51)"
+  ],
+  "standards_verbatim": "Organic ingredients, no seed oils, never frozen ingredient, thoughtful preparation, and professional on-site cooking when possible."
+}

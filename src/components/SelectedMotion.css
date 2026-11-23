@@ -1,0 +1,36 @@
+/* Selected accents: first-paint copy and intrinsic dimensions remain in place. */
+.experience-counter{position:relative;display:inline-block;flex:none;min-width:2ch;line-height:1;font-variant-numeric:tabular-nums;transform-origin:50% 60%}
+.experience-counter-value{display:block}
+.experience-counter-window{position:absolute;inset:0;overflow:hidden;opacity:0;pointer-events:none}
+.experience-counter-reel{display:flex;flex-direction:column;transform:translateY(-40em)}
+.experience-counter-reel>span{display:block;height:1em;line-height:1;flex:none}
+.experience-counter[data-counter-state=playing] .experience-counter-value{opacity:0}
+.experience-counter[data-counter-state=playing] .experience-counter-window{opacity:1}
+.experience-counter[data-counter-state=playing]{animation:experience-counter-emphasis 1600ms cubic-bezier(.16,1,.3,1) both}
+.experience-counter[data-counter-state=playing] .experience-counter-reel{animation:experience-count-settle 1600ms cubic-bezier(.16,1,.3,1) both}
+@keyframes experience-count-settle{from{transform:translateY(0)}to{transform:translateY(-40em)}}
+@keyframes experience-counter-emphasis{0%{transform:scale(.96);color:rgb(var(--c-ink))}18%{transform:scale(1.22);color:rgb(var(--c-cta))}62%{transform:scale(1.08);color:rgb(var(--c-cta))}88%{transform:scale(.99)}100%{transform:scale(1);color:rgb(var(--c-ink))}}
+
+/* Arrows supplement the existing colour, underline and focus states. */
+.cta-link>.icon-arrow-up-right,.cta-link>.icon-arrow-right,.cta-link>.icon-arrow-left,[data-cta-card] .icon-arrow-right,.sergio-header-service-action>.icon-arrow-right,.footer-colophon a>.icon-arrow-up{transition:transform 300ms cubic-bezier(.16,1.3,.3,1);transform:translate(0,0) scale(1)}
+@media(hover:hover){
+ .cta-link:hover>.icon-arrow-up-right{transform:translate(7px,-7px) scale(1.2)}
+ .cta-link:hover>.icon-arrow-right,[data-cta-card]:hover .icon-arrow-right,.sergio-header-experiences>a:hover .icon-arrow-right{transform:translateX(10px) scale(1.2)}
+ .cta-link:hover>.icon-arrow-left{transform:translateX(-7px) scale(1.2)}
+ .footer-colophon a:hover>.icon-arrow-up{transform:translateY(-7px) scale(1.2)}
+}
+.cta-link:focus-visible>.icon-arrow-up-right{transform:translate(7px,-7px) scale(1.2)}
+.cta-link:focus-visible>.icon-arrow-right,[data-cta-card]:focus-visible .icon-arrow-right,.sergio-header-experiences>a:focus-visible .icon-arrow-right{transform:translateX(10px) scale(1.2)}
+.cta-link:focus-visible>.icon-arrow-left{transform:translateX(-7px) scale(1.2)}
+.footer-colophon a:focus-visible>.icon-arrow-up{transform:translateY(-7px) scale(1.2)}
+.cta-link:active>.icon-arrow-up-right{transform:translate(2px,-2px) scale(1.08)}
+.cta-link:active>.icon-arrow-right,[data-cta-card]:active .icon-arrow-right,.sergio-header-experiences>a:active .icon-arrow-right{transform:translateX(2px) scale(1.08)}
+.cta-link:active>.icon-arrow-left{transform:translateX(-2px) scale(1.08)}
+@media(max-width:620px){.home-experience{display:flex;gap:10px;margin:18px 0 0;font-size:14px;line-height:20px}.home-experience-number{font-size:34px}}
+@media(prefers-reduced-motion:reduce){
+ .experience-counter[data-counter-state=playing] .experience-counter-value{opacity:1}
+ .experience-counter[data-counter-state=playing] .experience-counter-window{opacity:0}
+ .experience-counter-reel{animation:none!important}
+ .experience-counter{animation:none!important;transform:none!important;color:inherit!important}
+ .cta-link>svg,[data-cta-card] .icon-arrow-right,.sergio-header-service-action>.icon-arrow-right,.footer-colophon a>.icon-arrow-up{transition:none!important;transform:none!important}
+}

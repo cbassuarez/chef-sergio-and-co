@@ -1,0 +1,135 @@
+// Renders every route to static HTML so the content exists without JavaScript (search engines, slow phones).
+import fs from 'node:fs'
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
+import { ensureCards } from './og-cards.mjs'
+
+// DIST_DIR / SSR_DIR let a check build a second copy (e.g. production mode) without touching dist/.
+const dist = path.resolve(process.env.DIST_DIR || 'dist')
+const clientHtml = fs.readFileSync(path.join(dist, 'index.html'), 'utf8')
+const templateCache = path.join(dist, '.vite/prerender-template.json')
+// Keep the client shell so a second prerender cannot use the already-rendered home page as every route's template.
+let template
+if (clientHtml.includes('<!--app-head-->') && clientHtml.includes('<!--app-html-->')) {
+  template = clientHtml
+  fs.mkdirSync(path.dirname(templateCache), { recursive: true })
+  fs.writeFileSync(templateCache, JSON.stringify(template))
+} else if (fs.existsSync(templateCache)) template = JSON.parse(fs.readFileSync(templateCache, 'utf8'))
+else throw new Error('Client template missing. Run npm run build:client before prerendering.')
+const { render, routes, redirects, caseRedirects, IS_PROTOTYPE, site } = await import(pathToFileURL(path.resolve(process.env.SSR_DIR || 'dist-ssr', 'entry-server.js')).href)
+const base = process.env.BASE_PATH || '/'
+
+const LOOK = process.env.LOOK || 'c'
+const iconHead = [
+  `<link rel="icon" href="${base}favicon.ico?v=salon-1" sizes="16x16 32x32 48x48">`,
+  `<link rel="icon" type="image/png" href="${base}favicon-32x32.png?v=salon-1" sizes="32x32">`,
+  `<link rel="icon" type="image/png" href="${base}favicon-16x16.png?v=salon-1" sizes="16x16">`,
+  `<link rel="icon" type="image/svg+xml" href="${base}favicon.svg?v=salon-1" sizes="any">`,
+  `<link rel="apple-touch-icon" href="${base}apple-touch-icon.png?v=salon-1" sizes="180x180">`,
+].join('\n')
+
+// Preload the fonts the shipped look renders above the fold, so text doesn't reflow when they arrive (layout shift).
+const assets = fs.readdirSync(path.join(dist, 'assets'))
+const manifest = JSON.parse(fs.readFileSync(path.join(dist, '.vite/manifest.json'), 'utf8'))
+// Discover only the homepage's hydration graph in the HTML. Otherwise the route and its static imports
+// wait for the entry script before they can compete with below-the-fold lazy images for a connection.
+function homeModulePreloads() {
+  const seen = new Set()
+  const files = new Set()
+  const visit = (key) => {
+    if (seen.has(key)) return
+    seen.add(key)
+    const chunk = manifest[key]
+    if (!chunk) throw new Error(`Homepage preload chunk missing from Vite manifest: ${key}`)
+    for (const dependency of chunk.imports ?? []) visit(dependency)
+    if (chunk.file.endsWith('.js') && !template.includes(`src="${base}${chunk.file}"`)) files.add(chunk.file)
+  }
+  visit('src/pages/Home.tsx')
+  return [...files].map((file) => `<link rel="modulepreload" crossorigin href="${base}${file}">`).join('\n    ')
+}
+const homePreloads = homeModulePreloads()
+const preloads = [/^eb-garamond-core-wght-.*\.woff2$/, /^archivo-core-wght-.*\.woff2$/]
+  .map((re) => assets.find((a) => re.test(a)))
+  .filter(Boolean)
+  .map((f) => `<link rel="preload" href="${base}assets/${f}" as="font" type="font/woff2" crossorigin>`)
+  .join('\n    ')
+// Runs before first paint: marks JS as available (for CSS-only entrances) and, in the all-looks prototype,
+// applies ?look= or the remembered look so there is no flash of the wrong look.
+const bootScript = `<script>document.documentElement.classList.add('js');${
+  LOOK === 'all'
+    ? `try{var q=new URLSearchParams(location.search).get('look'),l=q||localStorage.getItem('look');if(l&&/^[abc]$/.test(l)){document.documentElement.setAttribute('data-look',l);if(q)localStorage.setItem('look',q)}}catch(e){}`
+    : ''
+}</script>`
+
+// Share cards: re-rendered only when their words, the logo or the fonts change (see og-cards.mjs).
+const shareImages = await ensureCards(routes, { distDir: dist })
+// Absolute URL for og:url/og:image. A prototype preview can set PUBLIC_URL (e.g. https://name.github.io/repo) so its
+// shared links show cards; production always uses the real domain.
+const publicUrl = (IS_PROTOTYPE && process.env.PUBLIC_URL?.replace(/\/$/, '')) || site.url
+
+for (const r of routes) {
+  const { html, head } = render(r.path, { image: shareImages[r.path], publicUrl })
+  // Discover service-page priority images before font downloads as well.
+  const heroPhoto = html.match(/<img\b(?=[^>]*fetchpriority="high")(?=[^>]*data-reference=)[^>]*>/)?.[0]
+  const imageAttribute = (name) => heroPhoto?.match(new RegExp(`\\b${name}="([^"]*)"`, 'i'))?.[1]
+  // Discover the responsive hero image ahead of module preloads so hydration never queues it behind scripts.
+  const imagePreload = heroPhoto
+    ? `<link rel="preload" as="image" href="${imageAttribute('src')}" imagesrcset="${imageAttribute('srcset')}" imagesizes="${imageAttribute('sizes')}" fetchpriority="high">`
+    : ''
+  const page = template
+    .replace('<html lang="en">', `<html lang="en" data-look="${LOOK === 'all' ? 'c' : LOOK}">`)
+    .replace('<!--app-head-->', `${bootScript}\n    ${imagePreload}\n    ${preloads}\n    ${r.path === '/' ? homePreloads : ''}\n    ${head}`)
+    .replace('<div id="root"><!--app-html--></div>', `<div id="root" data-route="${r.path}">${html}</div>`)
+  const out = path.join(dist, r.path, 'index.html')
+  fs.mkdirSync(path.dirname(out), { recursive: true })
+  fs.writeFileSync(out, page)
+  console.log('prerendered', r.path, `${(page.length / 1024).toFixed(1)} KB`)
+}
+
+// Redirect stubs for old Wix URLs (no JS needed). Google treats an instant meta refresh as a permanent redirect.
+const writeStub = (from, to) => {
+  const target = base + to.replace(/^\//, '')
+  const stub = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved</title><meta name="robots" content="noindex">${iconHead}<link rel="canonical" href="${site.url}${to}"><meta http-equiv="refresh" content="0; url=${target}"></head><body><p>This page moved to <a href="${target}">${target}</a>.</p></body></html>`
+  const out = path.join(dist, from, 'index.html')
+  fs.mkdirSync(path.dirname(out), { recursive: true })
+  fs.writeFileSync(out, stub)
+}
+for (const [from, to] of Object.entries(redirects)) writeStub(from, to)
+// Mis-cased old URLs need their own folder (/About/ next to /about/), which only a case-sensitive filesystem can hold.
+// The deploy builds on Linux, so the live site gets them; a macOS build skips them and 404.html's script covers browsers.
+const probe = path.join(dist, '.case-probe')
+fs.writeFileSync(probe, '')
+const caseSensitive = !fs.existsSync(path.join(dist, '.CASE-PROBE'))
+fs.rmSync(probe)
+if (caseSensitive) for (const [from, to] of Object.entries(caseRedirects)) writeStub(from, to)
+
+// 404: first try a lowercase / trailing-slash version of the URL (old Wix links like /About), then show a branded fallback.
+const known = JSON.stringify(routes.map((r) => r.path))
+fs.writeFileSync(
+  path.join(dist, '404.html'),
+  `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | ${site.name}</title>${iconHead}<meta name="robots" content="noindex"><script>(function(){var b=${JSON.stringify(base)},k=${known},p=location.pathname.slice(b.length-1).toLowerCase().replace(/\\/?$/,'/');if(k.indexOf(p)>-1&&p!==location.pathname.slice(b.length-1))location.replace(b+p.slice(1)+location.search)})()</script></head><body style="font-family:system-ui;max-width:36rem;margin:4rem auto;padding:0 1rem;background:#FCFAF5;color:#2D2B27"><a href="${base}" aria-label="Chef Sergio and Company, home"><img src="${base}brand/logo-primary-ink.svg?v=salon-1" alt="" width="426" height="65" style="width:280px;max-width:100%;height:auto;margin-bottom:3rem"></a><h1>That page doesn't exist</h1><p>Try the <a href="${base}">home page</a>, or <a href="${base}book/">check your date</a> with Chef Sergio.</p></body></html>`,
+)
+
+// robots.txt only controls crawling; noindex controls indexing, and a crawler can only see noindex on a page it's
+// allowed to fetch. So the prototype allows crawling (every page carries noindex) and blocks only the watermarked
+// reference photos, which can't carry a meta tag. Production allows everything, AI assistants' crawlers included:
+// being the answer when someone asks an assistant for a private chef in Orlando is worth more than hiding from it.
+fs.writeFileSync(
+  path.join(dist, 'robots.txt'),
+  IS_PROTOTYPE
+    ? `# Prototype: every page is noindex. Reference photos are third-party and watermarked.\nUser-agent: *\nDisallow: ${base}reference/\n`
+    : `User-agent: *\nAllow: /\n\nSitemap: ${site.url}/sitemap.xml\n`,
+)
+// The sitemap lists exactly the indexable, canonical URLs. No <lastmod>: Google only trusts it when it's accurate,
+// and nothing here records when a page's content last changed. A prototype has no indexable pages, so no sitemap.
+const indexable = routes.filter((r) => !r.noindex)
+fs.rmSync(path.join(dist, 'sitemap.xml'), { force: true })
+if (!IS_PROTOTYPE)
+  fs.writeFileSync(
+    path.join(dist, 'sitemap.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${indexable.map((r) => `  <url><loc>${site.url}${r.path}</loc></url>`).join('\n')}\n</urlset>\n`,
+  )
+fs.writeFileSync(path.join(dist, '.nojekyll'), '')
+if (!IS_PROTOTYPE) fs.writeFileSync(path.join(dist, 'CNAME'), 'www.chefsergioandco.com\n')
+if (!IS_PROTOTYPE) fs.rmSync(path.join(dist, 'reference'), { recursive: true, force: true })
+console.log(`mode=${IS_PROTOTYPE ? 'prototype' : 'production'} look=${LOOK} routes=${routes.length} redirects=${Object.keys(redirects).length}${caseSensitive ? ` case-redirects=${Object.keys(caseRedirects).length}` : ' (case redirects skipped: case-insensitive filesystem)'} share-url=${publicUrl}`)

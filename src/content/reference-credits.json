@@ -1,0 +1,649 @@
+{
+ "hero-chef-plating": {
+  "width": 1280,
+  "height": 1600,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/hero-chef-plating-640.webp",
+    "sha256": "0c3458265d904acebc26c7ab15b192aac1eeb931bb709f996f90f1dfe447dae8",
+    "bytes": 55986
+   },
+   {
+    "w": 960,
+    "file": "reference/hero-chef-plating-960.webp",
+    "sha256": "45773f89f2f5f9624e2852628c77899fe835b62f28bfb3e10da144387155fd35",
+    "bytes": 100556
+   },
+   {
+    "w": 1280,
+    "file": "reference/hero-chef-plating-1280.webp",
+    "sha256": "487603048a355267132cd898c7af5b47ce2429091d095ee5c3d3182c1fb832f5",
+    "bytes": 148494
+   }
+  ],
+  "title": "Concurso Internacional de Paella de Sueca 2016 - 39.jpg",
+  "creator": "Carlos Delgado",
+  "license": "by-sa",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "landing": "https://commons.wikimedia.org/wiki/File:Concurso_Internacional_de_Paella_de_Sueca_2016_-_39.jpg",
+  "provider": "Wikimedia Commons",
+  "aspect": "4:5",
+  "shape": null
+ },
+ "chef-portrait": {
+  "width": 1280,
+  "height": 1600,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/chef-portrait-640.webp",
+    "sha256": "9b53b20c8ecf280ef462bfe5ae9600398721337b423c1c5043baa26ee74b983a",
+    "bytes": 43170
+   },
+   {
+    "w": 960,
+    "file": "reference/chef-portrait-960.webp",
+    "sha256": "b9923b3ea89f45bfdfa3f02d6be5a66660c5498a375ae1f452352ffefa0a6d88",
+    "bytes": 70020
+   },
+   {
+    "w": 1280,
+    "file": "reference/chef-portrait-1280.webp",
+    "sha256": "d2a2b29e15f3c1515a36d37abdf67debe6e01973e42f305d31a1892b7dcc768e",
+    "bytes": 99204
+   }
+  ],
+  "title": "Chef",
+  "creator": "aturkus",
+  "license": "by",
+  "license_url": "https://creativecommons.org/licenses/by/2.0/",
+  "landing": "https://www.flickr.com/photos/76345376@N00/602259226",
+  "provider": "flickr",
+  "aspect": "4:5",
+  "shape": null
+ },
+ "guests-at-table": {
+  "width": 1280,
+  "height": 853,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/guests-at-table-640.webp",
+    "sha256": "ed45de16b933122e67d1ba1489cc8d21ea21e689c863a3aa88d21d67452a0177",
+    "bytes": 39296
+   },
+   {
+    "w": 960,
+    "file": "reference/guests-at-table-960.webp",
+    "sha256": "a386e76328c97ea72aa74a7a8e2ebbda2c8395c37792a0726e60cc13ed6f0e02",
+    "bytes": 68434
+   },
+   {
+    "w": 1280,
+    "file": "reference/guests-at-table-1280.webp",
+    "sha256": "c339fe0d2ae47e67785e1103753cc4a1045bd01ddddbde198f6d81650cf29222",
+    "bytes": 95858
+   }
+  ],
+  "title": "Indian dinner party - Table 1",
+  "creator": "nickgraywfu",
+  "license": "by-sa",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "landing": "https://www.flickr.com/photos/35034365374@N01/2284683016",
+  "provider": "flickr",
+  "aspect": "3:2",
+  "shape": null
+ },
+ "class-hands": {
+  "width": 1280,
+  "height": 853,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/class-hands-640.webp",
+    "sha256": "0aa7f03da46c3bf53c21f5e8d547371125fa1c57a455853f4038dcb39f247cd9",
+    "bytes": 28284
+   },
+   {
+    "w": 960,
+    "file": "reference/class-hands-960.webp",
+    "sha256": "660426d6a70fe741cfeb2af0b972faffeea9e590d0aa92bdb556981754de52b4",
+    "bytes": 44592
+   },
+   {
+    "w": 1280,
+    "file": "reference/class-hands-1280.webp",
+    "sha256": "6fafead366a130599fbfa18882f2e3b4d1ef622bdfa89e68f03ec3bd3c67ea6d",
+    "bytes": 62046
+   }
+  ],
+  "title": "Cooking 02",
+  "creator": "akeg",
+  "license": "by-sa",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "landing": "https://www.flickr.com/photos/88583398@N00/2719986740",
+  "provider": "flickr",
+  "aspect": "3:2",
+  "shape": null
+ },
+ "catering-table": {
+  "width": 1280,
+  "height": 853,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/catering-table-640.webp",
+    "sha256": "b82abd1682f84873a7d7532d29621879d6ef2d2ed7af5f9d913cab4060441e75",
+    "bytes": 37560
+   },
+   {
+    "w": 960,
+    "file": "reference/catering-table-960.webp",
+    "sha256": "c9bbd1f6f2ec70593b0f019d97cc7564c455b93451d7aab7919e5c67cd6e19e6",
+    "bytes": 65646
+   },
+   {
+    "w": 1280,
+    "file": "reference/catering-table-1280.webp",
+    "sha256": "702e687758cb2ab2e9d6e6c35d04c7480f01e05a141c3a5659e057e6f3e2a78c",
+    "bytes": 88276
+   }
+  ],
+  "title": "Table Setting",
+  "creator": "Tracy Hunter",
+  "license": "by",
+  "license_url": "https://creativecommons.org/licenses/by/2.0/",
+  "landing": "https://www.flickr.com/photos/11121785@N00/133891501",
+  "provider": "flickr",
+  "aspect": "3:2",
+  "shape": null
+ },
+ "mise-en-place": {
+  "width": 1280,
+  "height": 1280,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/mise-en-place-640.webp",
+    "sha256": "aeb64746356a7081318c84d0f50184b4d4452ef739b8adc41e7fac260ce2ce26",
+    "bytes": 60808
+   },
+   {
+    "w": 960,
+    "file": "reference/mise-en-place-960.webp",
+    "sha256": "fcfef967b89a0745b7032565498588d4b7ba6dd9c7d448d0cc4132534629233a",
+    "bytes": 119838
+   },
+   {
+    "w": 1280,
+    "file": "reference/mise-en-place-1280.webp",
+    "sha256": "b145fcb37e0659fe01c5e6ece40040c518442e4303f9845437df31b0f3b88936",
+    "bytes": 189434
+   }
+  ],
+  "title": "Ingredienti per il pesto Genovese e Pesto Genovese (Ingridients for Pesto Genovese and Pesto genovese).jpg",
+  "creator": "Petar Milošević",
+  "license": "by-sa",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "landing": "https://commons.wikimedia.org/wiki/File:Ingredienti_per_il_pesto_Genovese_e_Pesto_Genovese_(Ingridients_for_Pesto_Genovese_and_Pesto_genovese).jpg",
+  "provider": "Wikimedia Commons",
+  "aspect": "1:1",
+  "shape": null
+ },
+ "dish-vol-au-vent": {
+  "width": 1280,
+  "height": 1600,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/dish-vol-au-vent-640.webp",
+    "sha256": "691f7ce23bf63d352dfe071579f3aaa2e6b464c05204fde3f82e6c563c0eb958",
+    "bytes": 56924
+   },
+   {
+    "w": 960,
+    "file": "reference/dish-vol-au-vent-960.webp",
+    "sha256": "a19ab5857d4edf0dd87a1d02df08dfb0214b736f3d1abdfba5fe7e019358a73d",
+    "bytes": 93504
+   },
+   {
+    "w": 1280,
+    "file": "reference/dish-vol-au-vent-1280.webp",
+    "sha256": "59d73a6f81c4a18384dac10fbbc9ae3885b1c59239b5fd7bfcbefd75b21c8948",
+    "bytes": 134424
+   }
+  ],
+  "title": "Vol au Vent de Legumes D'Automne",
+  "creator": "arnold | inuyaki",
+  "license": "by",
+  "license_url": "https://creativecommons.org/licenses/by/2.0/",
+  "landing": "https://www.flickr.com/photos/58819758@N00/4202801986",
+  "provider": "flickr",
+  "aspect": "4:5",
+  "shape": null
+ },
+ "dish-lobster-bisque": {
+  "width": 1280,
+  "height": 1600,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/dish-lobster-bisque-640.webp",
+    "sha256": "331e743012c69d9e74ab19369640caef187f1ad86675fb082f1860db365909cf",
+    "bytes": 39310
+   },
+   {
+    "w": 960,
+    "file": "reference/dish-lobster-bisque-960.webp",
+    "sha256": "71fc38c827b4e51461d2132b1e313ffc1f5fbe07358a5a18e4c03f4e69c4e1fc",
+    "bytes": 63084
+   },
+   {
+    "w": 1280,
+    "file": "reference/dish-lobster-bisque-1280.webp",
+    "sha256": "e353ec99107c18058b877b78fb27ba0a99c01f9ec8e286df50e84caea5999fc1",
+    "bytes": 92370
+   }
+  ],
+  "title": "corn lobster bisque",
+  "creator": "stu_spivack",
+  "license": "by-sa",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "landing": "https://www.flickr.com/photos/35034346243@N01/2648691450",
+  "provider": "flickr",
+  "aspect": "4:5",
+  "shape": null
+ },
+ "dish-seafood-paella": {
+  "width": 1280,
+  "height": 1600,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/dish-seafood-paella-640.webp",
+    "sha256": "4bead0b7ff81a17fafe144bd1d6aa2bea706d8f9b0ea7a0478df8ff68d1cd68f",
+    "bytes": 97988
+   },
+   {
+    "w": 960,
+    "file": "reference/dish-seafood-paella-960.webp",
+    "sha256": "d72b3de3e16acfe5790e59136b5883bb368c956ec896e463f90f07eb26839bb5",
+    "bytes": 180920
+   },
+   {
+    "w": 1280,
+    "file": "reference/dish-seafood-paella-1280.webp",
+    "sha256": "5d86df086f6cef476a25f3ccafe44845efb16da2d5d2990e42e19f1fb3a36754",
+    "bytes": 253122
+   }
+  ],
+  "title": "Paella de fruit de mer.jpg",
+  "creator": "Wilfredor",
+  "license": "cc0",
+  "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "landing": "https://commons.wikimedia.org/wiki/File:Paella_de_fruit_de_mer.jpg",
+  "provider": "Wikimedia Commons",
+  "aspect": "4:5",
+  "shape": null
+ },
+ "dish-beef-stroganoff": {
+  "width": 1280,
+  "height": 1600,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/dish-beef-stroganoff-640.webp",
+    "sha256": "80da7698c98fdfceb566f4ebf89c97c678bc334a98b8eddb16d589e083d216d4",
+    "bytes": 67594
+   },
+   {
+    "w": 960,
+    "file": "reference/dish-beef-stroganoff-960.webp",
+    "sha256": "8c67cd227bf6c7a0f937b9f9a4e3f69fd19d742caf97bbd859b7c9088f7acae6",
+    "bytes": 108608
+   },
+   {
+    "w": 1280,
+    "file": "reference/dish-beef-stroganoff-1280.webp",
+    "sha256": "daccf5ca2d47f86d38173fa7b6fc01a15f065a73bf3a4cb7df123e7c8e9191c8",
+    "bytes": 153242
+   }
+  ],
+  "title": "Beef Stroganoff, sorta",
+  "creator": "jeffreyw",
+  "license": "by",
+  "license_url": "https://creativecommons.org/licenses/by/2.0/",
+  "landing": "https://www.flickr.com/photos/7927684@N03/4360825644",
+  "provider": "flickr",
+  "aspect": "4:5",
+  "shape": null
+ },
+ "dish-thai-chicken-curry": {
+  "width": 1280,
+  "height": 1600,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/dish-thai-chicken-curry-640.webp",
+    "sha256": "60bf0e434de68d6a0ce8835c2624bc21f568bae0f5713df7ecbc95704c4860b9",
+    "bytes": 61246
+   },
+   {
+    "w": 960,
+    "file": "reference/dish-thai-chicken-curry-960.webp",
+    "sha256": "f6d38910b23e54729741ffbbaaf51ef60fdfb1ef3f72f21eba1afcc80d98ac92",
+    "bytes": 100594
+   },
+   {
+    "w": 1280,
+    "file": "reference/dish-thai-chicken-curry-1280.webp",
+    "sha256": "454afa846ca5465e0f549be72108084a50af22c10c9408063fa098d0649b0484",
+    "bytes": 147532
+   }
+  ],
+  "title": "Thai Chicken Curry",
+  "creator": "JeepDude79",
+  "license": "by-sa",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "landing": "https://www.flickr.com/photos/11146671@N06/6027429979",
+  "provider": "flickr",
+  "aspect": "4:5",
+  "shape": null
+ },
+ "sergios-table": {
+  "width": 1280,
+  "height": 853,
+  "files": [
+   {
+    "w": 640,
+    "file": "reference/sergios-table-640.webp",
+    "sha256": "799a3c4615c6b0f2dd116b375f8f366e1ec2c4ae77bcaaf8269e3b880522f17a",
+    "bytes": 53962
+   },
+   {
+    "w": 960,
+    "file": "reference/sergios-table-960.webp",
+    "sha256": "558326a3b2d25e28fca49347c5c344710788f8746094540e614c76ba41a972ce",
+    "bytes": 102646
+   },
+   {
+    "w": 1280,
+    "file": "reference/sergios-table-1280.webp",
+    "sha256": "77810b9b59f771567a75283f52d2c5f38e22ef7a0ea2a310ec5b3d4d3f5f6f28",
+    "bytes": 169664
+   }
+  ],
+  "title": "Breakfast in Île d'Orléans 072.jpg",
+  "creator": "Wilfredor",
+  "license": "cc0",
+  "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "landing": "https://commons.wikimedia.org/wiki/File:Breakfast_in_%C3%8Ele_d%27Orl%C3%A9ans_072.jpg",
+  "provider": "Wikimedia Commons",
+  "aspect": "3:2",
+  "shape": null
+ },
+ "hero-dish": {
+  "width": 960,
+  "height": 960,
+  "files": [
+   {
+    "w": 320,
+    "file": "reference/hero-dish-320.webp",
+    "sha256": "a70ce1a8c153f9bac5cf98243a2c670a76cef3fac476b660f8e3b9d3f3fa3d17",
+    "bytes": 25276
+   },
+   {
+    "w": 640,
+    "file": "reference/hero-dish-640.webp",
+    "sha256": "859db14afba487eb2fc7a79f1c9b0d1e543b018dc93c328fefc0eb94c828b7f2",
+    "bytes": 72038
+   },
+   {
+    "w": 960,
+    "file": "reference/hero-dish-960.webp",
+    "sha256": "51c90c7379ac7ee0e32875682d73beac9076195732f2f9f2885a35e527f24624",
+    "bytes": 130402
+   }
+  ],
+  "title": "Paella de fruit de mer.jpg",
+  "creator": "Wilfredor",
+  "license": "cc0",
+  "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "landing": "https://commons.wikimedia.org/wiki/File:Paella_de_fruit_de_mer.jpg",
+  "provider": "Wikimedia Commons",
+  "aspect": "1:1",
+  "shape": "circle"
+ },
+ "home-dish": {
+  "width": 1024,
+  "height": 768,
+  "files": [
+   {
+    "w": 480,
+    "file": "reference/home-dish-480.webp",
+    "sha256": "2f125edfbc4c6731f825e5ea73c47cf2cc55a35748c1eb7013d8fd051b2f9b10",
+    "bytes": 19302
+   },
+   {
+    "w": 800,
+    "file": "reference/home-dish-800.webp",
+    "sha256": "ec302cef2a949c0eb73040a0caa1fe41cbeed548f9dd0eec96a3f4c810a8fcf9",
+    "bytes": 43690
+   },
+   {
+    "w": 1024,
+    "file": "reference/home-dish-1024.webp",
+    "sha256": "9db71faead586c6b0a523075fd2c1c8b566db84b1a9f9916647b5a84d2551ebb",
+    "bytes": 81992
+   }
+  ],
+  "title": "Vol au Vent de Legumes D'Automne",
+  "creator": "arnold | inuyaki",
+  "license": "by",
+  "license_url": "https://creativecommons.org/licenses/by/2.0/",
+  "landing": "https://www.flickr.com/photos/58819758@N00/4202801986",
+  "provider": "flickr",
+  "aspect": "4:3",
+  "shape": null,
+  "treatment": "captioned",
+  "src": "https://live.staticflickr.com/2742/4202801986_00a5c1392e_b.jpg",
+  "source_sha256": "1bfe427c6a97d0f572d63c895cd38fa2144d7c7136311d06391867c41be22e7a",
+  "provenance": "Licensed source original selected for the approved conventional hero study. Composition reference only; it does not depict Sergio or his food."
+ },
+ "gallery-vol-au-vent": {
+  "width": 1024,
+  "height": 768,
+  "files": [
+   {
+    "w": 480,
+    "file": "reference/gallery-vol-au-vent-480.webp",
+    "sha256": "77a40c674e57e7df88061f0c345a5758da0c88282a4ad1df1dbb593bac62073e",
+    "bytes": 19552
+   },
+   {
+    "w": 800,
+    "file": "reference/gallery-vol-au-vent-800.webp",
+    "sha256": "0ca8865dcf92c01436d86cfdf561085241cffc2aac61ad76a0ba87fc529f4cf6",
+    "bytes": 43606
+   },
+   {
+    "w": 1024,
+    "file": "reference/gallery-vol-au-vent-1024.webp",
+    "sha256": "0655b4aeb471086a54d98dc804b3f286a218870c237af53fd79e0c51bca2db43",
+    "bytes": 66718
+   }
+  ],
+  "title": "Vol au Vent de Legumes D'Automne",
+  "creator": "arnold | inuyaki",
+  "license": "by",
+  "license_url": "https://creativecommons.org/licenses/by/2.0/",
+  "landing": "https://www.flickr.com/photos/58819758@N00/4202801986",
+  "provider": "flickr",
+  "aspect": "source",
+  "shape": null,
+  "source_width": 1024,
+  "source_height": 768,
+  "license_version": "2.0",
+  "treatment": "captioned",
+  "src": "https://live.staticflickr.com/2742/4202801986_00a5c1392e_b.jpg",
+  "source_sha256": "1bfe427c6a97d0f572d63c895cd38fa2144d7c7136311d06391867c41be22e7a",
+  "provenance": "Licensed reference photograph for the dish carousel; not Sergio’s food and not evidence of his ingredients, plating or finished dish. The complete original composition is preserved without cropping, enhancement, filtering or enlargement."
+ },
+ "gallery-lobster-bisque": {
+  "width": 1024,
+  "height": 681,
+  "files": [
+   {
+    "w": 480,
+    "file": "reference/gallery-lobster-bisque-480.webp",
+    "sha256": "50195ba0bd9c9a0d74e9969416a352ac178bea573342e847110169ae94fb32d1",
+    "bytes": 8428
+   },
+   {
+    "w": 800,
+    "file": "reference/gallery-lobster-bisque-800.webp",
+    "sha256": "39f12167a894d5a8a71f9e59dd4c3e9e9391cf3e0220adf76f4bce09a8e488de",
+    "bytes": 16492
+   },
+   {
+    "w": 1024,
+    "file": "reference/gallery-lobster-bisque-1024.webp",
+    "sha256": "f461de2ed384b1ff03c6145b3d31dc5d6d20f1999c51abde7d5c3bd98bfb7ea2",
+    "bytes": 23428
+   }
+  ],
+  "title": "corn lobster bisque",
+  "creator": "stu_spivack",
+  "license": "by-sa",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "landing": "https://www.flickr.com/photos/35034346243@N01/2648691450",
+  "provider": "flickr",
+  "aspect": "source",
+  "shape": null,
+  "source_width": 1024,
+  "source_height": 681,
+  "license_version": "2.0",
+  "treatment": "captioned",
+  "src": "https://live.staticflickr.com/3022/2648691450_bb0eb87feb_b.jpg",
+  "source_sha256": "104ab2863bbbe03a03fe4b6ee39f7d4e6de98caebcbf533cd2580f35136994bd",
+  "provenance": "Licensed reference photograph for the dish carousel; not Sergio’s food and not evidence of his ingredients, plating or finished dish. The complete original composition is preserved without cropping, enhancement, filtering or enlargement."
+ },
+ "gallery-seafood-paella": {
+  "width": 1280,
+  "height": 895,
+  "files": [
+   {
+    "w": 480,
+    "file": "reference/gallery-seafood-paella-480.webp",
+    "sha256": "b3063b4285885a3950d0899881ee61e9b50ea67fe38d33866e1c4a33b806452b",
+    "bytes": 29346
+   },
+   {
+    "w": 800,
+    "file": "reference/gallery-seafood-paella-800.webp",
+    "sha256": "2e6c93e34e1eeb37b334d88eb4617d6bbce50c01c13e9cd83e90917ed6dda96d",
+    "bytes": 67716
+   },
+   {
+    "w": 1280,
+    "file": "reference/gallery-seafood-paella-1280.webp",
+    "sha256": "da6bc56b8965b99c2e532d84bd25b15e543795440bd9975fc553014b066f02cf",
+    "bytes": 145654
+   }
+  ],
+  "title": "Paella de fruit de mer.jpg",
+  "creator": "Wilfredor",
+  "license": "cc0",
+  "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "landing": "https://commons.wikimedia.org/wiki/File:Paella_de_fruit_de_mer.jpg",
+  "provider": "Wikimedia Commons",
+  "aspect": "source",
+  "shape": null,
+  "source_width": 1920,
+  "source_height": 1343,
+  "license_version": "cc0",
+  "treatment": "captioned",
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Paella_de_fruit_de_mer.jpg/1920px-Paella_de_fruit_de_mer.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "source_sha256": "98234b29ff76b968595071ef3943fedc1e5a329ce815e87002e9ee483f498ba2",
+  "provenance": "Licensed reference photograph for the dish carousel; not Sergio’s food and not evidence of his ingredients, plating or finished dish. The complete original composition is preserved without cropping, enhancement, filtering or enlargement."
+ },
+ "gallery-beef-stroganoff": {
+  "width": 1024,
+  "height": 680,
+  "files": [
+   {
+    "w": 480,
+    "file": "reference/gallery-beef-stroganoff-480.webp",
+    "sha256": "0138539b1e968bb40d088c77ba9b8b9290505d7fcc748c827e1cb88cc39b6f5e",
+    "bytes": 38870
+   },
+   {
+    "w": 800,
+    "file": "reference/gallery-beef-stroganoff-800.webp",
+    "sha256": "c9ad4880ab3238a0c0b64085cb5eb13dbd12a060d7adfe412ca5f2215a5f1518",
+    "bytes": 78986
+   },
+   {
+    "w": 1024,
+    "file": "reference/gallery-beef-stroganoff-1024.webp",
+    "sha256": "cf59f6ccd7f6576fcb64dfe155f81d58d987ba33378a61078d179ae49f0315dc",
+    "bytes": 108014
+   }
+  ],
+  "title": "Beef Stroganoff, sorta",
+  "creator": "jeffreyw",
+  "license": "by",
+  "license_url": "https://creativecommons.org/licenses/by/2.0/",
+  "landing": "https://www.flickr.com/photos/7927684@N03/4360825644",
+  "provider": "flickr",
+  "aspect": "source",
+  "shape": null,
+  "source_width": 1024,
+  "source_height": 680,
+  "license_version": "2.0",
+  "treatment": "captioned",
+  "src": "https://live.staticflickr.com/4068/4360825644_2341e95eec_b.jpg",
+  "source_sha256": "7558c8feaa3e1706e73c377b45fe2d9c0a0ee2365fa9c6dae806dfed0c3164cd",
+  "provenance": "Licensed reference photograph for the dish carousel; not Sergio’s food and not evidence of his ingredients, plating or finished dish. The complete original composition is preserved without cropping, enhancement, filtering or enlargement."
+ },
+ "gallery-thai-chicken-curry": {
+  "width": 1024,
+  "height": 683,
+  "files": [
+   {
+    "w": 480,
+    "file": "reference/gallery-thai-chicken-curry-480.webp",
+    "sha256": "a505ef672b16c212abe5ca109d37cef6c507282364513bbfa55c3b727072e54e",
+    "bytes": 26142
+   },
+   {
+    "w": 800,
+    "file": "reference/gallery-thai-chicken-curry-800.webp",
+    "sha256": "b7339a05dd8bbf83e7dfccad25bb4e20d2c2caa5f2304a4490312de2e90035c6",
+    "bytes": 59930
+   },
+   {
+    "w": 1024,
+    "file": "reference/gallery-thai-chicken-curry-1024.webp",
+    "sha256": "9c3903c6555be70350dc5c25be988996cebcfb51f3734eb6bea015efb9eb6810",
+    "bytes": 91228
+   }
+  ],
+  "title": "Thai Chicken Curry",
+  "creator": "JeepDude79",
+  "license": "by-sa",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "landing": "https://www.flickr.com/photos/11146671@N06/6027429979",
+  "provider": "flickr",
+  "aspect": "source",
+  "shape": null,
+  "source_width": 1024,
+  "source_height": 683,
+  "license_version": "2.0",
+  "treatment": "captioned",
+  "src": "https://live.staticflickr.com/6124/6027429979_00e41e3810_b.jpg",
+  "source_sha256": "c08df19d31625c32d2af03dd2ab92465444cba20d3ea45955dfbd8144faece93",
+  "provenance": "Licensed reference photograph for the dish carousel; not Sergio’s food and not evidence of his ingredients, plating or finished dish. The complete original composition is preserved without cropping, enhancement, filtering or enlargement."
+ }
+}

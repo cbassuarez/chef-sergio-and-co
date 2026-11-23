@@ -1,0 +1,652 @@
+{
+  "kind": "authored-3d-render",
+  "pipeline": "conservative-viscous-film",
+  "sources": [
+    {
+      "path": "scripts/blender/create_plating_scene.py",
+      "sha256": "817de994bda31942209073cfb1ceb87bf1840981578e566499b5d6b29df8a02d"
+    },
+    {
+      "path": "scripts/blender/plating_spoon.py",
+      "sha256": "53f06cf1a4c44f23e0389de2ca489101fee4bfbc9c0e6ff5b9628100e77b5346"
+    },
+    {
+      "path": "scripts/blender/plating_fluid.py",
+      "sha256": "9bbcfe48f705ad59ec7c92c4f68c9cda0ab43e634b7b6a7e7ecd27e12bb82606"
+    },
+    {
+      "path": "scripts/blender/plating_materials.py",
+      "sha256": "7e2390c7507b1869d950f694c64936d11786f2b99eb05829dadef45fa5c6d5d1"
+    },
+    {
+      "path": "scripts/blender/plating_engraving.py",
+      "sha256": "445aed6ab4b696984bda8ecac12fc0a2c9b92e6a75f0cd04289a6e131b014824"
+    },
+    {
+      "path": "scripts/blender/plating_reservoir.py",
+      "sha256": "7ab3c2b76b34af30e2eab6b09f10e5bca59abc74a6d74ab1308f7af2e0b43908"
+    },
+    {
+      "path": "scripts/blender/plating_external.py",
+      "sha256": "d639e4d57228592c511143c2f77a5015efbf0f3376685c16bf2d20299a0f39a7"
+    },
+    {
+      "path": "scripts/blender/plating_thinfilm.py",
+      "sha256": "b14de05e57488a0a15d3764133f858f5287d58e1c8790f8b63274d7138a24023"
+    },
+    {
+      "path": "scripts/blender/plating_thinfilm_solver.cpp",
+      "sha256": "cb8af567f181f5e300d37259bdea60f621708eed3e26830cbaa87da8eab1c6d5"
+    },
+    {
+      "path": "scripts/blender/prepare_plating_performance.py",
+      "sha256": "80274167f74ec63b765c9cc11c947b906147a864f126fbbb9eb429b5b2e32044"
+    },
+    {
+      "path": "scripts/blender/plating_surface.py",
+      "sha256": "bd9c4a8d1a194e1037d9100809c5d8ba2f1d35d265fc4113ebfc935c07c40393"
+    },
+    {
+      "path": "scripts/blender/render_thinfilm_sequence.py",
+      "sha256": "2fb7a3dd484fd382cefb12504919358d6dfd1c61307d813834a91539eb4bcc72"
+    }
+  ],
+  "assets": [
+    {
+      "file": "art/plating/desktop/0000.webp",
+      "sha256": "1f47cd6b6503bc07b874298b65426187e6d6a37aacd58570263f175ddfb1cad8"
+    },
+    {
+      "file": "art/plating/desktop/0001.webp",
+      "sha256": "1d2a976d98461537ec00e2c4f96f3a8ca10a807644d0e72f7964038a9f49fef4"
+    },
+    {
+      "file": "art/plating/desktop/0002.webp",
+      "sha256": "57b74eb114f4d79aa84dc6bccbd940aef1d12cb00f1ee3a3751222e08cfe6cf7"
+    },
+    {
+      "file": "art/plating/desktop/0003.webp",
+      "sha256": "1b86fa2452d1cea5274e4febd8a51c97669ebc5f5a5e95b1129eda8a51be2b8e"
+    },
+    {
+      "file": "art/plating/desktop/0004.webp",
+      "sha256": "980b2793dcf5d507da6ad2d5ff1e212d883ccb10744f23ed84c1d4bead6f7ece"
+    },
+    {
+      "file": "art/plating/desktop/0005.webp",
+      "sha256": "7f673543ff3ea68f7265523d03fe51e1248674f7966d575884ebe9a7e9080928"
+    },
+    {
+      "file": "art/plating/desktop/0006.webp",
+      "sha256": "36a4d7338c403b854c7b6a59503dce41c207148f0f14f57494bf6ad55ce1aa64"
+    },
+    {
+      "file": "art/plating/desktop/0007.webp",
+      "sha256": "5c3a730cf1f3367727b40cbad742d86f6e5913cfe50ddc9b9d4de99e25e51fa0"
+    },
+    {
+      "file": "art/plating/desktop/0008.webp",
+      "sha256": "eaf2d60970b310146525d2fcd542db3ea610671d9ec69565ed366cb0ea6e0937"
+    },
+    {
+      "file": "art/plating/desktop/0009.webp",
+      "sha256": "b1f1762dde37c2977031e4fc8fdc7fd2ba3a8c78c9b7601af20458ce08cb2a45"
+    },
+    {
+      "file": "art/plating/desktop/0010.webp",
+      "sha256": "a84a445b550eed0a7ba7767531b0f469f993d092dbeea4c44e32cc7b96c2fb89"
+    },
+    {
+      "file": "art/plating/desktop/0011.webp",
+      "sha256": "8d50c746ebb8f2a2235b658ad622ba4a35b1eb77b809af2af7778cc1d05d8b34"
+    },
+    {
+      "file": "art/plating/desktop/0012.webp",
+      "sha256": "2a7c09e1f5cb111709308292087b48932ad4325c520ca9209ce4236c7820b28a"
+    },
+    {
+      "file": "art/plating/desktop/0013.webp",
+      "sha256": "f86b1c65182d05f438c8a47d644b19003fb1a3c13c1b047b2f9c267cec52cb6a"
+    },
+    {
+      "file": "art/plating/desktop/0014.webp",
+      "sha256": "fb6c487ee6ac2b149705c3f73aecbd1651b92f8d5e6176733cf2acd4e1e7b949"
+    },
+    {
+      "file": "art/plating/desktop/0015.webp",
+      "sha256": "f166514bedafe574cae4543eeb9962f6c8f652a622c4eb0392d363b229131966"
+    },
+    {
+      "file": "art/plating/desktop/0016.webp",
+      "sha256": "759caea79fea582e4f6332707e66faa00c2cbb75c078fdbfbac0b79a86f86a05"
+    },
+    {
+      "file": "art/plating/desktop/0017.webp",
+      "sha256": "cea401055471723fe380b0c73d9335b7400043aa6574b07cb4b9b58550c659db"
+    },
+    {
+      "file": "art/plating/desktop/0018.webp",
+      "sha256": "4036196b119b6cc4e70e85890268417f0ba82966561856afef6b8b0c935c8390"
+    },
+    {
+      "file": "art/plating/desktop/0019.webp",
+      "sha256": "86455552af7b7e086a74ef4610ea99dc5b52c9769f0876c6f7a18ae15883c27d"
+    },
+    {
+      "file": "art/plating/desktop/0020.webp",
+      "sha256": "c20fb1204f593dbaf009a7c7191b71812746dfad6c0bfd57ab1df3b6375159a0"
+    },
+    {
+      "file": "art/plating/desktop/0021.webp",
+      "sha256": "1aba98f5673cb6b28b22ee742ca31060d369bb567d08de56c2ea45d590c9ee50"
+    },
+    {
+      "file": "art/plating/desktop/0022.webp",
+      "sha256": "ff78e766bffc9836cfee7842f2b93cfa1b372f47f812d60edd23df6e24c03b04"
+    },
+    {
+      "file": "art/plating/desktop/0023.webp",
+      "sha256": "875242c1e7c07e681a55106f3994a9a14ecd60cc5c02aa03a03eaf2fe48db210"
+    },
+    {
+      "file": "art/plating/desktop/0024.webp",
+      "sha256": "9dbb8553e8c1f6fedbab704e32d6d366f2a2a6cbbdec80ab97ec53a45aeee17c"
+    },
+    {
+      "file": "art/plating/desktop/0025.webp",
+      "sha256": "a5e988a1219264564279bbe16512a37cd4d8266e4d1d9f3c329689c349c07be5"
+    },
+    {
+      "file": "art/plating/desktop/0026.webp",
+      "sha256": "9f4dababa9e4c335657a08b327e5792818d3520a094703be3ea285c707445e50"
+    },
+    {
+      "file": "art/plating/desktop/0027.webp",
+      "sha256": "3c793ce2763c2c1bea7bce8eabd13584b80c80bab47b2ec076d8e5557f708fe9"
+    },
+    {
+      "file": "art/plating/desktop/0028.webp",
+      "sha256": "35f0b4c77f5440e059c3c5d3a43e7cd86373d4dc0ef48d91e4fe1149e87a36ed"
+    },
+    {
+      "file": "art/plating/desktop/0029.webp",
+      "sha256": "d854d072c0461e014e959ccb1b13ae0ec7f3e41144f4cb909d388a1acbd9d4b8"
+    },
+    {
+      "file": "art/plating/desktop/0030.webp",
+      "sha256": "e01595901d0ff3e7d96a209242df5461c33f130bbe163cd9130c2296be9a8225"
+    },
+    {
+      "file": "art/plating/desktop/0031.webp",
+      "sha256": "17f5fa214f109af519c69675ce1d59cfd62a4d041012847eb7f56fc5e76dc556"
+    },
+    {
+      "file": "art/plating/desktop/0032.webp",
+      "sha256": "ddec5d896308cdbcabef8d249b04c7269dee67a5916ea2c974b712e24f78e270"
+    },
+    {
+      "file": "art/plating/desktop/0033.webp",
+      "sha256": "7596b3af0048a620573e7295263dec9780d1812a0276e8ac0e5ac81f117f4e72"
+    },
+    {
+      "file": "art/plating/desktop/0034.webp",
+      "sha256": "45d50ecbb7068d797d632467c17b9aba98d8bac8ff3c7fc61fc862ed484c5662"
+    },
+    {
+      "file": "art/plating/desktop/0035.webp",
+      "sha256": "f6480ef7a17fd613ae605045f56e44feb1bc1e37e621b6850b0dbb2dd0ebfc18"
+    },
+    {
+      "file": "art/plating/desktop/0036.webp",
+      "sha256": "dbfdb7d1693f0aa2639d7f0bb5489d01202705968c3d3594f9ba8bf74daeb173"
+    },
+    {
+      "file": "art/plating/desktop/0037.webp",
+      "sha256": "f8793846f95d1046e0dc1d7617a7c6007053f332882499d044771231d5857a35"
+    },
+    {
+      "file": "art/plating/desktop/0038.webp",
+      "sha256": "e053fdc59671833e195cce0831609dee5d40e4e7d7bac9234f3217205c86c070"
+    },
+    {
+      "file": "art/plating/desktop/0039.webp",
+      "sha256": "9dd3fd6acaec686fae1a7f478b075238da20fc3ccf478128f66c75e59d5ddcc7"
+    },
+    {
+      "file": "art/plating/desktop/0040.webp",
+      "sha256": "01cad1c0617d4bd77d4166c16f928878cb903dbf1773b6c92f731261ced1f2c0"
+    },
+    {
+      "file": "art/plating/desktop/0041.webp",
+      "sha256": "563f9657c6c58f444c1b7d1dd579513b53a60db40b9030427818d542dd1eacbf"
+    },
+    {
+      "file": "art/plating/desktop/0042.webp",
+      "sha256": "0bf620f2be8bd976b63a4ac8029a311708e5a2ae39169c3d723e046a431ed848"
+    },
+    {
+      "file": "art/plating/desktop/0043.webp",
+      "sha256": "accfb7b553aa5d65c2ddde839e6e94e394e9bd4914fc68a18045de442b26a22b"
+    },
+    {
+      "file": "art/plating/desktop/0044.webp",
+      "sha256": "d6ce73c5d08d8b1e26db2e4de75afbd380b6b0750a777943c6d4b4aa70fe645b"
+    },
+    {
+      "file": "art/plating/desktop/0045.webp",
+      "sha256": "47350a83cff3f179be81b568c03ba5b7d499d057c52e929c1d62c6816faef712"
+    },
+    {
+      "file": "art/plating/desktop/0046.webp",
+      "sha256": "3a5ff31a51c9aaef761cdc4b056b4189a09fcc045466b51c2f331bafccf5989a"
+    },
+    {
+      "file": "art/plating/desktop/0047.webp",
+      "sha256": "a7ef4b3c6a2c69bce588a5f6f6963aaf863c6b1143839a63aa8f46dd8cd28008"
+    },
+    {
+      "file": "art/plating/desktop/0048.webp",
+      "sha256": "73ea956e36496346d554a53ef968e221e96127494fd6c10dddfc43945ed3af75"
+    },
+    {
+      "file": "art/plating/desktop/0049.webp",
+      "sha256": "dd3bb98e5993b7d45b11d637578c426562af0e23af9eaae094270b7bdd95177a"
+    },
+    {
+      "file": "art/plating/desktop/0050.webp",
+      "sha256": "08a153e6f2e1eab610d617e9f975ceaea3b4ba414f2905400bf6e38a8acd1f54"
+    },
+    {
+      "file": "art/plating/desktop/0051.webp",
+      "sha256": "57ef7217981392e96d52ee56371e19b9145e03fefa2df4b94c6136a833f6074a"
+    },
+    {
+      "file": "art/plating/desktop/0052.webp",
+      "sha256": "856502fa216946dcd8e6e9185b765724a6585fcbc5f62bd53d688946ae8e23ee"
+    },
+    {
+      "file": "art/plating/desktop/0053.webp",
+      "sha256": "9c0db63208019960b4a7877b457781b35f8af981662a3204cd02f62eee71514f"
+    },
+    {
+      "file": "art/plating/desktop/0054.webp",
+      "sha256": "b903157c033930f39f5dae1cd0463ffa73bb0ad64dc73afd05460d97b412d0ca"
+    },
+    {
+      "file": "art/plating/desktop/0055.webp",
+      "sha256": "2b7d899a639dcca3a6f9fee05f4a14ef3de4eb9c5a80e3bf048a1822859f361d"
+    },
+    {
+      "file": "art/plating/desktop/0056.webp",
+      "sha256": "ba7fa335898705934069efc7a9f35dd30b3e783684ca7fa7a6bd364418124313"
+    },
+    {
+      "file": "art/plating/desktop/0057.webp",
+      "sha256": "f62068428eec3dd3f7905e31651817b6923aef09f91c7462dee6d75f1be2a046"
+    },
+    {
+      "file": "art/plating/desktop/0058.webp",
+      "sha256": "743c28f3704b7f3ac7457d44c4f8f81fe4bb6b8e197f949180da2c834208bca8"
+    },
+    {
+      "file": "art/plating/desktop/0059.webp",
+      "sha256": "17cd861430d294bd6c5260bacb3276eec9ae6f9b1fe5ff2a92609d456a2c173c"
+    },
+    {
+      "file": "art/plating/desktop/0060.webp",
+      "sha256": "186a8432b2429b7b2d5e4e041e14a12df43297276a0a5288c6355934563a602c"
+    },
+    {
+      "file": "art/plating/desktop/0061.webp",
+      "sha256": "7c871a19282d214fc667dc179d213263922a77da3967fe65a355e0c4b5c3fd2f"
+    },
+    {
+      "file": "art/plating/desktop/0062.webp",
+      "sha256": "65eb050e0a95157ed915f463867a8e0397bd68af149354b9316c3bd8b8499324"
+    },
+    {
+      "file": "art/plating/desktop/0063.webp",
+      "sha256": "fa2bee49bc081922ae5446e1147858fe85f2255bb7ebe394a0b46bd62e9ab176"
+    },
+    {
+      "file": "art/plating/desktop/0064.webp",
+      "sha256": "cede3a162fdb8e820791cfac4ced03627fc216dbb8c8f7b53d88b6eac2952686"
+    },
+    {
+      "file": "art/plating/desktop/0065.webp",
+      "sha256": "0164dd7367aa9984f370c2bfe49cd851bd84ed8a709ae4be06d57ef79b60b77d"
+    },
+    {
+      "file": "art/plating/desktop/0066.webp",
+      "sha256": "31ba4ce1c005ec3b1f0557fb9b91d8d8fc40da801f9a3c57f7e48674bd18f4a2"
+    },
+    {
+      "file": "art/plating/desktop/0067.webp",
+      "sha256": "5ce3b0d641ac7b7a698cef9d8184aa85ec150284893245c7ff1847a2455a25cb"
+    },
+    {
+      "file": "art/plating/desktop/0068.webp",
+      "sha256": "8b662a61aaa2dd6486a2db84ccefa69720ed7c3b518bcb65a7332639e48458e7"
+    },
+    {
+      "file": "art/plating/desktop/0069.webp",
+      "sha256": "faf77fc2ca3cc6efaac7310781f3e0399619ed4703d38eccfbc60de2d215e212"
+    },
+    {
+      "file": "art/plating/desktop/0070.webp",
+      "sha256": "0566f8fd6940f283e42f5a762afcfcfe2ffeaf8ae204808ad96e8f1850a32628"
+    },
+    {
+      "file": "art/plating/desktop/0071.webp",
+      "sha256": "75720239c923ac3bfd4da513d43dd16869237a8f56f20836c7a4642062d4559b"
+    },
+    {
+      "file": "art/plating/desktop/0072.webp",
+      "sha256": "829cf81190bb4753757e59969378fc5535c0a039ea90b3f6b7cb7e1ce7562144"
+    },
+    {
+      "file": "art/plating/mobile/0000.webp",
+      "sha256": "bf63c2c39895a3e847e1cb63a9104e7fe14e5e59a1b99ffa39faf71ac47d1577"
+    },
+    {
+      "file": "art/plating/mobile/0001.webp",
+      "sha256": "20b8c1256ad253d9174959450164c8484db1348378f1d868b2938dbc53b4c3b0"
+    },
+    {
+      "file": "art/plating/mobile/0002.webp",
+      "sha256": "976806d59b8d9476236e09fdc9e40c6f8113ff50c365f288255e17c65553ac3f"
+    },
+    {
+      "file": "art/plating/mobile/0003.webp",
+      "sha256": "9c172362d5f084a03e4737221a189f4f79ec099e5c3f04d0e832275cf1e7dc90"
+    },
+    {
+      "file": "art/plating/mobile/0004.webp",
+      "sha256": "7ae20207ed6e004b4b443285215c0142626c37ab9278d7c12034c4a7812ef4eb"
+    },
+    {
+      "file": "art/plating/mobile/0005.webp",
+      "sha256": "164da5fba18570278d13e6fc4bc4692d65b3e4f57c76531407bf548f048f2e5a"
+    },
+    {
+      "file": "art/plating/mobile/0006.webp",
+      "sha256": "6726e667a1367502479fcb3d80ecdc421c8e3eea52ced941f80a1400c46cef7d"
+    },
+    {
+      "file": "art/plating/mobile/0007.webp",
+      "sha256": "93c88df8f5683132888635179cfecb4a010b0ea304fab5862ee1cb6a105758c6"
+    },
+    {
+      "file": "art/plating/mobile/0008.webp",
+      "sha256": "793cc99d43b271eb11e1f33976780bc927871ec75974045f9e086924f0e76cd8"
+    },
+    {
+      "file": "art/plating/mobile/0009.webp",
+      "sha256": "8ef10b3e7fca2d4b17f70edb0610f2078e2327b7b5d08235cf5475691358676d"
+    },
+    {
+      "file": "art/plating/mobile/0010.webp",
+      "sha256": "b0092115f4940ab454578f74e7965fc0de11cb9fee7bbfb03de686a234eb5cec"
+    },
+    {
+      "file": "art/plating/mobile/0011.webp",
+      "sha256": "2f2a50db6a220251a824ea221c25ba8cbc218db601b53dd04988b13eb979a550"
+    },
+    {
+      "file": "art/plating/mobile/0012.webp",
+      "sha256": "f6e90330965e7129e91b58f2c7e0073858778844ad9c2ce409351e55b5bdfc56"
+    },
+    {
+      "file": "art/plating/mobile/0013.webp",
+      "sha256": "4c7209da821193bcc788269f952581faa70a92d87c6bbad42f4719d7ce9f8348"
+    },
+    {
+      "file": "art/plating/mobile/0014.webp",
+      "sha256": "71e30ed83c05855d383aa97a12f894bb8c49cad8417c1841ceb2085a9a82b581"
+    },
+    {
+      "file": "art/plating/mobile/0015.webp",
+      "sha256": "b722afb2b4ffb40ab8b8136715dfd6a7c14ed6183403d57bec7ecc8283d9714b"
+    },
+    {
+      "file": "art/plating/mobile/0016.webp",
+      "sha256": "3fc08d9f32037a83f72d15c39e87e3cb6d4e11cc24a9153f18a489354d867736"
+    },
+    {
+      "file": "art/plating/mobile/0017.webp",
+      "sha256": "d3d84b58871ff6b1643b378f7b97893f6a8e1981f6f2965ca14ca47ab67dd721"
+    },
+    {
+      "file": "art/plating/mobile/0018.webp",
+      "sha256": "b183a971ec17b39099b8325a83d440b976818631cfa0d90a6ff0593798901d10"
+    },
+    {
+      "file": "art/plating/mobile/0019.webp",
+      "sha256": "8c64c82346134b73b35e1512846e90d0bd3f570acfd3d39246dc23bd22ab7e7d"
+    },
+    {
+      "file": "art/plating/mobile/0020.webp",
+      "sha256": "717baf8b62fd4f9ba1ac1f58e92024c05f210e9c9eecfc9036c2a45062f7e683"
+    },
+    {
+      "file": "art/plating/mobile/0021.webp",
+      "sha256": "2ec5c40dc6e99f5a7443580b54f1db131dc2de57bdc9e4152028d79d17902c27"
+    },
+    {
+      "file": "art/plating/mobile/0022.webp",
+      "sha256": "b5fe53cd228901c29fd6529f31830d6ee22b7712cacb62281caeb1eaed300556"
+    },
+    {
+      "file": "art/plating/mobile/0023.webp",
+      "sha256": "ef2bd3cbe51b8f2671cd27a820cd0cec2312affe08491ce756df738bddea2b8e"
+    },
+    {
+      "file": "art/plating/mobile/0024.webp",
+      "sha256": "e62260f8e5125d65fa4713b266313fc253946ad6d7054e742b6f5b4abeac72a7"
+    },
+    {
+      "file": "art/plating/mobile/0025.webp",
+      "sha256": "3fe879aa41d46d40e12ae0b19b1062ed3f8658c9d6540441bfb95ec6ec0b327f"
+    },
+    {
+      "file": "art/plating/mobile/0026.webp",
+      "sha256": "4a0193993ae2fddc3ed04ddf1a5b1a2c09e800f3df3a3ea40ba060d524925467"
+    },
+    {
+      "file": "art/plating/mobile/0027.webp",
+      "sha256": "ca4e94d58a7a2f8b88a3bb4087c391d4c5d7f577ba6b8c19aac2f6d9182dc426"
+    },
+    {
+      "file": "art/plating/mobile/0028.webp",
+      "sha256": "eb33e359ec1bc3656494da21cf4bdafe597dbd29aadc5973e75dca6593ef3611"
+    },
+    {
+      "file": "art/plating/mobile/0029.webp",
+      "sha256": "d4ca214db2d91a743ca38372078328801cf46e3b6e66fd9e14e969a42240c4f0"
+    },
+    {
+      "file": "art/plating/mobile/0030.webp",
+      "sha256": "bdbad51ac133cac7106cb6332d669b68d6465e6832e043cda7548d9804b8dd05"
+    },
+    {
+      "file": "art/plating/mobile/0031.webp",
+      "sha256": "849c9bd034e0ae1c5f93ca58876bcfd7dc6658477dd7a29c8d16db4dbb830dbf"
+    },
+    {
+      "file": "art/plating/mobile/0032.webp",
+      "sha256": "7372154d0fdf2241f21148b232353fe6b1cdf51d64d6433f9f3261e6fc869158"
+    },
+    {
+      "file": "art/plating/mobile/0033.webp",
+      "sha256": "5f54e0706630186e60f02614c0a15c2eb8cfc090ec4be79a16141c6917838236"
+    },
+    {
+      "file": "art/plating/mobile/0034.webp",
+      "sha256": "b27472b9210530a51c7efd1bfbfd7153687e0b30816d0b165b6895029307554b"
+    },
+    {
+      "file": "art/plating/mobile/0035.webp",
+      "sha256": "aa91af7d6188a8b0ad389907100d4ba5e6a479cdbbedb67ca37316ea94eb5350"
+    },
+    {
+      "file": "art/plating/mobile/0036.webp",
+      "sha256": "ca94d37407b92cac9917af66129a4394cef07294036ab13545b0784b3abedc27"
+    },
+    {
+      "file": "art/plating/mobile/0037.webp",
+      "sha256": "136f48e9d78da629beef95b1350eef907a87a82bd361d442bf53d3ddf990aa02"
+    },
+    {
+      "file": "art/plating/mobile/0038.webp",
+      "sha256": "055108b23479d5fcf95dfeb03d8fc89d0caecf14911bbb0a0811f214f00561d8"
+    },
+    {
+      "file": "art/plating/mobile/0039.webp",
+      "sha256": "94e76f8ba31b97c38a92d244af9dc39f4f6b4cc57bb8d349fe95718ff0445a74"
+    },
+    {
+      "file": "art/plating/mobile/0040.webp",
+      "sha256": "4f6a098e6c387b5cfc7392dddf45177fbbbdf1684c29060a789b294719398e15"
+    },
+    {
+      "file": "art/plating/mobile/0041.webp",
+      "sha256": "62c65c181576b57c566b557c215470983893f05b45ca8120374cf1fee36215ba"
+    },
+    {
+      "file": "art/plating/mobile/0042.webp",
+      "sha256": "ac4d093cc0fc65e3be7d51f7ed4d5c224edb2080c1e215d916b678c1c5e9f211"
+    },
+    {
+      "file": "art/plating/mobile/0043.webp",
+      "sha256": "f1bd514c9dea61abf3068ce893f48e235b7a62f63eb02d4ffbdc64a7c6be9bc7"
+    },
+    {
+      "file": "art/plating/mobile/0044.webp",
+      "sha256": "88688bfc0cab0f787d4b1778e078564c45c62b212ba7cd3c7886454dcd99a484"
+    },
+    {
+      "file": "art/plating/mobile/0045.webp",
+      "sha256": "d394d9ffdc6e8b30099d1536383fa4e74725aefda7c42a764b23795faf21366b"
+    },
+    {
+      "file": "art/plating/mobile/0046.webp",
+      "sha256": "5d9839391b23fa36428d3e6d0b27085ea35e583c6abcff88597533b7e4304aed"
+    },
+    {
+      "file": "art/plating/mobile/0047.webp",
+      "sha256": "afb1b38562298e535317ada28454d57ee132b71f56ba85c1703156997a177525"
+    },
+    {
+      "file": "art/plating/mobile/0048.webp",
+      "sha256": "a7d884ec5dec17d8b9fe55617ada61133e5e025f566ae763d27fdd873ca7a787"
+    },
+    {
+      "file": "art/plating/mobile/0049.webp",
+      "sha256": "4804136ede04ddbe4645054f7871544566876a5a20cdbe12a6e240841cf4b3a6"
+    },
+    {
+      "file": "art/plating/mobile/0050.webp",
+      "sha256": "714b8d96afb07a5669e0feac0545b12703f8a3bb52f8a5919b75821d227ac07d"
+    },
+    {
+      "file": "art/plating/mobile/0051.webp",
+      "sha256": "7bc399abd03339d42abcca66fd03f5e8c4658ec08de99a8f87a9d36f64c97d56"
+    },
+    {
+      "file": "art/plating/mobile/0052.webp",
+      "sha256": "eaa683dd89c89c21328792ce33614f23442b8ea1f52d004ad272d1458944903e"
+    },
+    {
+      "file": "art/plating/mobile/0053.webp",
+      "sha256": "3c82b5f961a24060714c30549040e5d5e1ba8dacea41e1e3ac3a41649c42baf7"
+    },
+    {
+      "file": "art/plating/mobile/0054.webp",
+      "sha256": "718845e9f36a4851c0064f249675ed2de612b415ab53f7546ab5b301bf6de2a8"
+    },
+    {
+      "file": "art/plating/mobile/0055.webp",
+      "sha256": "6ee737e45ebe883d1320988634438bec4006eda91f88fa1c8d4d19416efbae06"
+    },
+    {
+      "file": "art/plating/mobile/0056.webp",
+      "sha256": "2a14c9a2d7edae6908d3d1b32e9a4f0be66ade810b6318b77cf294604143cb09"
+    },
+    {
+      "file": "art/plating/mobile/0057.webp",
+      "sha256": "8714b95018fe214378c007594378e9f2ae407386de34c8027bbf7cc3e9fa41db"
+    },
+    {
+      "file": "art/plating/mobile/0058.webp",
+      "sha256": "3ef1cd4a7a213fc3636c528d93cc9b4a1255a244847b62ac6e677c8b02f09e61"
+    },
+    {
+      "file": "art/plating/mobile/0059.webp",
+      "sha256": "572a191a6b171a2075d669b31688814d3d3191ceabd042b3e40e5c228a9d578e"
+    },
+    {
+      "file": "art/plating/mobile/0060.webp",
+      "sha256": "25aa2771ad48568fbdb8d47e6bf908f1f00914ce5a0e5da17ce0cc4cb0094a61"
+    },
+    {
+      "file": "art/plating/mobile/0061.webp",
+      "sha256": "5519dd4b09593ce33a8fe46e4df3cd3c3ae1ab849f61df3d2cffea69df28f4de"
+    },
+    {
+      "file": "art/plating/mobile/0062.webp",
+      "sha256": "dbc8125097b612e5ed23c985299557a50367f4e707c5e7eccef7cb4079179d88"
+    },
+    {
+      "file": "art/plating/mobile/0063.webp",
+      "sha256": "1b3f943d071ee8f7d6f685b98f51db752237b74585fdecb36188fb42c6992370"
+    },
+    {
+      "file": "art/plating/mobile/0064.webp",
+      "sha256": "29583177fa672e5627f0b280131b124ae5f3f2afa194700c5cd2dd24d25b42ca"
+    },
+    {
+      "file": "art/plating/mobile/0065.webp",
+      "sha256": "f4b926acdb3f25053ad0975fe03e9edc693fa1b07c55a01a27ae360b81a93f61"
+    },
+    {
+      "file": "art/plating/mobile/0066.webp",
+      "sha256": "510d2c6ba4e99ddd4a94adf2216ffbbcd29f08c704fa7f31c01ebdf43cd9d0ca"
+    },
+    {
+      "file": "art/plating/mobile/0067.webp",
+      "sha256": "1d9846f62c1a7683803beb08ab23c25651b916621446b9a6f23553b66b7266b2"
+    },
+    {
+      "file": "art/plating/mobile/0068.webp",
+      "sha256": "fe74ba355ac8e1e4fee3bd1c9fa16342ebdd1215eb4b35a11e2783b7a2747262"
+    },
+    {
+      "file": "art/plating/mobile/0069.webp",
+      "sha256": "89698028eeebf6b3568691827ea11877f1cd20f2fc9016c69b2b39ee1e94710f"
+    },
+    {
+      "file": "art/plating/mobile/0070.webp",
+      "sha256": "d02a59806fdcfb5442390f15e6a54673c6317141808f645dd97b94cec21c0937"
+    },
+    {
+      "file": "art/plating/mobile/0071.webp",
+      "sha256": "85cae4cce20b3a413304f70bd5db28bcf69dc61b905036b1c6d4d6a480c77175"
+    },
+    {
+      "file": "art/plating/mobile/0072.webp",
+      "sha256": "de6de0d9f81d61cd3927c5ebe38a5c00ebe8a95b64d4623314e4973377d09e2d"
+    },
+    {
+      "file": "art/plating/poster-1280.webp",
+      "sha256": "5f614990abbcc40f9a2de14a92ae5253890a938fd401a23614ea72622ff56033"
+    },
+    {
+      "file": "art/plating/poster-1920.webp",
+      "sha256": "829cf81190bb4753757e59969378fc5535c0a039ea90b3f6b7cb7e1ce7562144"
+    },
+    {
+      "file": "art/plating/poster-640.webp",
+      "sha256": "965df61ac615574044d44a95e8c7f27f998b680f9e12f8959f1999f272ac3120"
+    }
+  ]
+}
