@@ -7,6 +7,7 @@ installScrollNavigation()
 
 // Route-level code splitting: each page hydrates with only its own code (the home page never downloads the booking form).
 const pages: Record<string, () => Promise<ComponentType>> = {
+  '/invitation/': () => import('./booking/EventInvitation').then((m) => m.EventInvitation),
   '/': () => import('./pages/Home').then((m) => m.Home),
   '/privatedining/': () => import('./pages/Services').then((m) => m.PrivateDining),
   '/cookingclasses/': () => import('./pages/Services').then((m) => m.CookingClasses),
