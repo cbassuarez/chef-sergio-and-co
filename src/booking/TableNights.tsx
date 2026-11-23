@@ -7,7 +7,7 @@ import { clock, longDate, money } from './format'
 import type { Night } from './types'
 
 const todayET = () => new Intl.DateTimeFormat('en-CA', {timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())
-export const canRequestNight = (night:Night) => night.state !== 'cancelled' && night.state !== 'full' && night.taken < night.seats && night.date >= todayET() && night.cutoff >= todayET()
+export const canRequestNight = (night:Night) => night.state !== 'cancelled' && night.state !== 'full' && night.taken < night.seats && night.date >= todayET()
 
 export function SeatMeter({ n }: { n: Night }) {
   const left = Math.max(0,n.seats - n.taken)
