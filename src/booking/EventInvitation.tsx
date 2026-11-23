@@ -19,7 +19,7 @@ async function invitationCall<T>(path: string, body: unknown): Promise<T> {
 export function EventInvitation() {
   const [invitation, setInvitation] = useState<Invitation | null>(null), [loading, setLoading] = useState(true), [error, setError] = useState(''), [retry, setRetry] = useState(0)
   const [name, setName] = useState(''), [email, setEmail] = useState(''), [attending, setAttending] = useState('yes'), [dietary, setDietary] = useState(''), [allergies, setAllergies] = useState(''), [sending, setSending] = useState(false), [saved, setSaved] = useState(false)
-  const [hasNewMenu, setHasNewMenu] = useState(false), attention = useRef<InvitationAttention | null>(null)
+  const [hasNewMenu, setHasNewMenu] = useState(false), attention = useRef<InvitationAttention | null>(null), hydratedInvitation = useRef('')
   const proof = useRef({ id: '', accessToken: '' }), attempt = useRef<{ body: string; id: string } | null>(null), responseToken = useRef(''), responseVersion = useRef(0), live = useRef<HTMLParagraphElement>(null)
   useEffect(() => {
     let current = true
@@ -28,7 +28,7 @@ export function EventInvitation() {
     try { attention.current = parseInvitationAttention(localStorage.getItem('sergio-invitation-view:v1:' + id)) } catch { /* Same-page transitions still work when storage is unavailable. */ }
     try { const saved = JSON.parse(sessionStorage.getItem('invitation-response:' + id) || 'null'); responseToken.current = saved?.token || ''; responseVersion.current = saved?.version ?? 0 } catch { /* Responding still works without storage. */ }
     if (!id || !accessToken) { setError('Open the complete private invitation link shared by your host.'); setLoading(false); return }
-    let refreshing = false, hydrated = false
+    let refreshing = false
     const refresh = async () => {
       if (refreshing) return
       refreshing = true
@@ -42,8 +42,10 @@ export function EventInvitation() {
         try { localStorage.setItem('sergio-invitation-view:v1:' + id, JSON.stringify(attention.current)) } catch { /* Optional cross-visit memory. */ }
         setHasNewMenu(!!available && attention.current.newVersion === available)
         setInvitation(value); setError('')
-        if (!hydrated && value.ownResponse) { const r = value.ownResponse; setName(r.name); setEmail(r.email); setAttending(r.attending); setDietary(r.dietary); setAllergies(r.allergies); responseVersion.current = r.revision }
-        hydrated = true
+        if (hydratedInvitation.current !== id) {
+          if (value.ownResponse) { const r = value.ownResponse; setName(r.name); setEmail(r.email); setAttending(r.attending); setDietary(r.dietary); setAllergies(r.allergies); responseVersion.current = r.revision }
+          hydratedInvitation.current = id
+        }
       } catch (failure) { if (current) { setInvitation(null); setError(failure instanceof Error ? failure.message : 'This invitation could not be loaded.') } }
       finally { refreshing = false; if (current) setLoading(false) }
     }

@@ -36,6 +36,10 @@ check('menu copy is rendered as text rather than executable markup', () => {
   const html = render({ menuReady: true, menu: '<script>alert(1)</script>' })
   assert.match(html, /&lt;script&gt;/); assert.doesNotMatch(html, /<script>/)
 })
+check('the printable invitation includes only a ready menu even before its on-screen leaf is opened', () => {
+  assert.match(render({menuReady:true,menu:'Cordon bleu'}), /event-invitation-print-menu/)
+  assert.doesNotMatch(render({menuReady:false,menu:'PRIVATE draft dish'}), /event-invitation-print-menu|PRIVATE draft dish/)
+})
 check('a first visit establishes a baseline without pretending existing content was just added', () => {
   assert.equal(observeInvitation(null,null).newVersion,null)
   assert.equal(observeInvitation(null,'menu-v1').newVersion,null)

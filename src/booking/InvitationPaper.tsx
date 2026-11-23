@@ -28,6 +28,7 @@ export function InvitationPaper({ invitation, hasNewMenu = false, onMenuOpen }: 
       <summary><span id="invitation-menu-title" className="eyebrow">THE MENU</span><span className="event-invitation-menu-action"><span className="event-menu-open-label">Open menu</span><span className="event-menu-close-label">Close menu</span><span className="event-menu-chevron" aria-hidden="true">⌄</span></span></summary>
       <div className="event-invitation-menu">{menu.split('\n').filter(line => line.trim()).map((line, index) => <p key={index}>{line}</p>)}</div>
     </details>}
+    {menu && <section className="event-invitation-print-menu" aria-hidden="true"><h3 className="eyebrow">THE MENU</h3><div className="event-invitation-menu">{menu.split('\n').filter(line => line.trim()).map((line, index) => <p key={index}>{line}</p>)}</div></section>}
     {newMenu && <span className="sr-only" role="status">A menu has been added to your invitation. Open your menu to see what’s new.</span>}
   </article>
 }
