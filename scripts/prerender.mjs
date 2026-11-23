@@ -48,6 +48,31 @@ function homeModulePreloads() {
   return [...files].map((file) => `<link rel="modulepreload" crossorigin href="${base}${file}">`).join('\n    ')
 }
 const homePreloads = homeModulePreloads()
+
+// Next page (src/next-page/): what each page needs to open instantly, so it can be fetched or rendered before the
+// visitor asks for it. Private and transactional pages (invitations, receipts, checkout) are never fetched ahead.
+const NOT_AHEAD = new Set(['/invitation/', '/invitation/preview/', '/book/done/', '/book/pay/'])
+const entrySource = fs.readFileSync(path.resolve('src/entry-client.tsx'), 'utf8')
+const pageModules = Object.fromEntries([...entrySource.matchAll(/'(\/[^']*)':\s*\(\)\s*=>\s*import\('\.\/([^']+)'\)/g)].map(([, route, file]) => [route, file]))
+function pageChunks(route) {
+  const file = pageModules[route]
+  if (!file) throw new Error(`next-page: no page module for ${route} in src/entry-client.tsx`)
+  // A page module also imported statically elsewhere becomes a shared chunk, listed under its chunk name.
+  const key = [`src/${file}.tsx`, `src/${file}.ts`].find((k) => manifest[k]) ?? Object.keys(manifest).find((k) => manifest[k].isDynamicEntry && manifest[k].name === path.basename(file))
+  if (!key) throw new Error(`next-page: ${file} is missing from the Vite manifest`)
+  const files = [], styles = new Set()
+  const seen = new Set(['index.html']) // the entry is already running on every page
+  const visit = (k) => {
+    if (seen.has(k)) return
+    seen.add(k)
+    for (const dependency of manifest[k].imports ?? []) visit(dependency)
+    if (manifest[k].file.endsWith('.js')) files.push(manifest[k].file)
+    for (const css of manifest[k].css ?? []) styles.add(css)
+  }
+  visit(key)
+  return { m: files, ...(styles.size ? { c: [...styles] } : {}) }
+}
+const unescapeAttribute = (s) => s?.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
 const preloads = [/^eb-garamond-core-wght-.*\.woff2$/, /^archivo-core-wght-.*\.woff2$/]
   .map((re) => assets.find((a) => re.test(a)))
   .filter(Boolean)
@@ -67,18 +92,46 @@ const shareImages = await ensureCards(routes, { distDir: dist })
 // shared links show cards; production always uses the real domain.
 const publicUrl = (IS_PROTOTYPE && process.env.PUBLIC_URL?.replace(/\/$/, '')) || site.url
 
-for (const r of routes) {
+const rendered = routes.map((r) => {
   const { html, head } = render(r.path, { image: shareImages[r.path], publicUrl })
   // Discover service-page priority images before font downloads as well.
   const heroPhoto = html.match(/<img\b(?=[^>]*fetchpriority="high")(?=[^>]*data-reference=)[^>]*>/)?.[0]
   const imageAttribute = (name) => heroPhoto?.match(new RegExp(`\\b${name}="([^"]*)"`, 'i'))?.[1]
+  // The photograph the page opens with (usually its largest paint): the priority hero, else the first eager image.
+  const lead = heroPhoto ?? html.slice(html.indexOf('id="main"')).match(/<img\b(?=[^>]*(?:fetchpriority="high"|loading="eager"))[^>]*>/)?.[0]
+  const leadImage = lead && ['src', 'srcset', 'sizes'].map((name) => unescapeAttribute(lead.match(new RegExp(`\\b${name}="([^"]*)"`, 'i'))?.[1]) ?? '')
+  return { r, html, head, heroPhoto, imageAttribute, leadImage }
+})
+
+const nextPageHints = Object.fromEntries(
+  rendered
+    .filter(({ r }) => !NOT_AHEAD.has(r.path))
+    .map(({ r, leadImage }) => [r.path, { ...pageChunks(r.path), ...(leadImage ? { i: leadImage } : {}) }]),
+)
+// Chromium acts on these before the page's modules run: fetch on a short hover, render fully on press. next-page/ then
+// predicts earlier from pointer movement, focus and scrolling, and covers Safari and Firefox. Automated browsers
+// (navigator.webdriver: test runners, many crawlers) get no speculative loads: they would fetch pages nobody reads,
+// and Puppeteer loses track of navigations served from a prefetch. scripts/next-page-check.mjs opts back in.
+const aheadWhere = {
+  and: [
+    { href_matches: Object.keys(nextPageHints).map((p) => base + p.slice(1)) },
+    { not: { selector_matches: '[data-no-prefetch], [download], [target]:not([target="_self"])' } },
+  ],
+}
+const json = (value) => JSON.stringify(value).replace(/</g, '\\u003c')
+const nextPageHead = [
+  `<script id="next-page-rules">if(!navigator.webdriver){var s=document.createElement('script');s.type='speculationrules';s.textContent=${JSON.stringify(json({ prefetch: [{ source: 'document', where: aheadWhere, eagerness: 'moderate' }], prerender: [{ source: 'document', where: aheadWhere, eagerness: 'conservative' }] }))};document.head.appendChild(s)}</script>`,
+  `<script type="application/json" id="next-page-hints">${json(nextPageHints)}</script>`,
+].join('\n    ')
+
+for (const { r, html, head, heroPhoto, imageAttribute } of rendered) {
   // Discover the responsive hero image ahead of module preloads so hydration never queues it behind scripts.
   const imagePreload = heroPhoto
     ? `<link rel="preload" as="image" href="${imageAttribute('src')}" imagesrcset="${imageAttribute('srcset')}" imagesizes="${imageAttribute('sizes')}" fetchpriority="high">`
     : ''
   const page = template
     .replace('<html lang="en">', `<html lang="en" data-look="${LOOK === 'all' ? 'c' : LOOK}">`)
-    .replace('<!--app-head-->', `${bootScript}\n    ${imagePreload}\n    ${preloads}\n    ${r.path === '/' ? homePreloads : ''}\n    ${head}`)
+    .replace('<!--app-head-->', `${bootScript}\n    ${imagePreload}\n    ${preloads}\n    ${r.path === '/' ? homePreloads : ''}\n    ${head}\n    ${r.path.startsWith('/invitation/') ? '' : nextPageHead}`)
     .replace('<div id="root"><!--app-html--></div>', `<div id="root" data-route="${r.path}">${html}</div>`)
   const out = path.join(dist, r.path, 'index.html')
   fs.mkdirSync(path.dirname(out), { recursive: true })

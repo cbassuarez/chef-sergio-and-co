@@ -2,8 +2,10 @@ import { StrictMode, type ComponentType } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { App } from './App'
 import { installScrollNavigation } from './scroll-navigation'
+import { installNextPage } from './next-page'
 
 installScrollNavigation()
+installNextPage()
 
 // Route-level code splitting: each page hydrates with only its own code (the home page never downloads the booking form).
 const pages: Record<string, () => Promise<ComponentType>> = {
