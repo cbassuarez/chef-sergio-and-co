@@ -59,7 +59,7 @@ export function EventInvitation() {
     if (!attention.current || !invitation?.menuVersion) return
     attention.current = acknowledgeMenu(attention.current, invitation.menuVersion)
     try { localStorage.setItem('sergio-invitation-view:v1:' + invitation.id, JSON.stringify(attention.current)) } catch { /* Same-page acknowledgment is sufficient. */ }
-    setHasNewMenu(false)
+    setHasNewMenu(!!attention.current.newVersion)
   }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (sending || !invitation) return
