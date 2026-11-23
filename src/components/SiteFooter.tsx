@@ -5,6 +5,7 @@ import { CtaLink } from './CallToAction'
 import { href, track } from './ui'
 import { Logo } from './Logo'
 import { useOnceVisible } from './useOnceVisible'
+import { FooterAccount } from './AccountAccess'
 
 const experiences = [
   { path: '/privatedining/', label: 'Private dinners', icon: 'utensils-crossed' },
@@ -107,6 +108,7 @@ export function SiteFooter() {
           </div>
         </div>
 
+        <FooterAccount/>
         <div className="footer-colophon">
           <p>© {new Date().getFullYear()} {site.name}</p>
           <a href="#main"><span>Back to top</span><Icon name="arrow-up" size={16} /></a>

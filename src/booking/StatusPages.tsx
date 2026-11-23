@@ -4,6 +4,7 @@ import { MenuCard } from '../components/MenuCard'
 import { CtaButton, CtaLink } from '../components/CallToAction'
 import { href } from '../components/ui'
 import { site } from '../content/site'
+import { BookingAccountAccess } from '../components/AccountAccess'
 import { api } from './api'
 import { clock, ics, longDate, money } from './format'
 import { NightList } from './TableNights'
@@ -96,6 +97,7 @@ export function BookDone() {
       {receipt.status !== 'cancelled' && !cancelOpen && <button type="button" className="link mt-7 text-sm" onClick={() => setCancelOpen(true)}>Cancel this {paid ? 'booking' : 'request'}</button>}
       {cancelOpen && <section className="booking-receipt-section" aria-label="Review cancellation"><h2 className="text-2xl">Cancel your {paid ? 'booking' : 'request'}?</h2><p className="mt-3">{paid ? receipt.kind === 'table' ? 'Sergio will review the applicable seat cancellation terms. Payment and any refund will be shown separately.' : `Before Sergio sends your menu-interview invitation, cancellation receives a full deposit refund. An explicit cancellation afterward may retain the planning fee disclosed when you paid${config?.planningFee != null ? ` (${money(config.planningFee)})` : ''}; Sergio may choose to refund fully.` : 'No payment has been collected. Cancelling closes this request.'}</p><label className="mt-4 block" htmlFor="cancel-reason">Anything you’d like Sergio to know? (optional)</label><textarea id="cancel-reason" className="booking-input mt-2" rows={3} maxLength={1000} value={reason} onChange={event => setReason(event.target.value)}/><div className="cta-pair mt-4"><CtaButton type="button" emphasis="secondary" disabled={busy} onClick={() => setCancelOpen(false)}>Keep my booking</CtaButton><CtaButton type="button" emphasis="primary" disabled={busy} onClick={() => void cancel()}>{busy ? 'Cancelling…' : 'Confirm cancellation'}</CtaButton></div></section>}
       <p className="booking-small mt-7">Keep this private link to check your status. It is not emailed automatically. Your contact, kitchen and dietary details are not displayed here.</p>
+      <BookingAccountAccess/>
     </div><MenuCard data={cardFor(receipt)} stamp={head.stamp}/></div>}
   </section>
 }

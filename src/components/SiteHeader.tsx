@@ -5,6 +5,7 @@ import { href, track } from './ui'
 import { Logo } from './Logo'
 import { HeaderIconAction } from './HeaderIconAction'
 import { ExperienceNavIcon } from './ExperienceNavIcon'
+import { AccountMenu } from './AccountAccess'
 import { useReducedMotion } from 'framer-motion'
 
 const services = [
@@ -192,6 +193,7 @@ export function SiteHeader({ route }: { route: string }) {
           {secondary.map(link => (
             <a key={link.path} href={href(link.path)} aria-current={route === link.path ? 'page' : undefined}><Icon name={link.icon} size={17} /><span>{link.label}</span></a>
           ))}
+          <AccountMenu navigationOpen={open} onOpen={() => close()}/>
         </nav>
         <div className="sergio-header-controls">
           <HeaderIconAction kind="link" icon="calendar-days" label="Start planning" emphasis="primary"
