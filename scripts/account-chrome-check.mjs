@@ -69,7 +69,7 @@ try {
     await page.focus('.account-access-trigger'); await page.keyboard.press('Enter')
     assert.equal(await page.$eval('.account-access-trigger', element => element.getAttribute('aria-expanded')), 'true')
     await page.keyboard.press('Tab')
-    assert.equal(await page.evaluate(() => document.activeElement?.textContent?.trim()), 'My bookings')
+    assert.equal(await page.evaluate(() => document.activeElement?.textContent?.trim()), 'Your evenings')
     await page.keyboard.press('Escape')
     assert.equal(await page.evaluate(() => document.activeElement?.classList.contains('account-access-trigger')), true)
     await page.click('.account-access-trigger'); await page.click('main h1')

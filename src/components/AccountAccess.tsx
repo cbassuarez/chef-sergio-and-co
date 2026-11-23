@@ -50,7 +50,7 @@ function AccountLinks({ onNavigate }: { onNavigate?: () => void }) {
   const { state } = useContext(AccountContext)
   const signedIn = state.kind === 'ready' && state.value.authenticated
   return <>
-    <a href={accountHref('bookings')} onClick={onNavigate}><Icon name="book-open" size={18}/><span>My bookings</span><Icon name="arrow-up-right" size={15}/></a>
+    <a href={accountHref('bookings')} onClick={onNavigate}><Icon name="book-open" size={18}/><span>Your evenings</span><Icon name="arrow-up-right" size={15}/></a>
     {signedIn && state.value.isAdmin && <a href={accountHref('admin')} onClick={onNavigate}><Icon name="chef-hat" size={18}/><span>Admin dashboard</span><Icon name="arrow-up-right" size={15}/></a>}
     {signedIn && !state.value.emailVerified && <a href={accountHref('verifyEmail')} onClick={onNavigate}><Icon name="mail" size={18}/><span>Verify my email</span></a>}
     {signedIn ? <a href={accountHref('signOut')} onClick={onNavigate}><Icon name="arrow-right" size={18}/><span>Sign out</span></a> : <>
@@ -84,7 +84,7 @@ export function AccountMenu({ navigationOpen, onOpen }: { navigationOpen: boolea
     </button>
     <div className="account-access-panel" id={id} hidden={!open}>
       <div className="account-access-intro"><p>{signedIn ? state.value.displayName ? `Welcome, ${state.value.displayName}.` : 'Welcome back.' : 'Your plans, close at hand.'}</p>
-        <span>{signedIn ? state.value.emailVerified ? 'Bookings and receipts, together.' : 'Verify your email to link your bookings.' : 'Open your bookings and receipts in your account.'}</span></div>
+        <span>{signedIn ? state.value.emailVerified ? 'Evenings, menus and receipts, together.' : 'Verify your email to link your bookings.' : 'Open your evenings, menus and receipts.'}</span></div>
       <nav aria-label="Your account"><AccountLinks onNavigate={() => setOpen(false)}/></nav>
       {state.kind === 'loading' && <p className="account-access-note" role="status">Checking account status…</p>}
       {state.kind === 'unavailable' && <div className="account-access-note"><span>Account status is unavailable here. You can still open your account.</span><button type="button" onClick={refresh}>Check again</button></div>}
@@ -97,7 +97,7 @@ export function FooterAccount() {
   const { state } = useContext(AccountContext)
   const signedIn = state.kind === 'ready' && state.value.authenticated
   return <section className="footer-account" aria-labelledby="footer-account-title">
-    <div className="footer-account-copy"><Icon name="users" size={23}/><div><h3 id="footer-account-title">Your account</h3><p>{signedIn ? 'Your bookings and receipts, together.' : 'A place for your plans and receipts.'}</p></div></div>
+    <div className="footer-account-copy"><Icon name="users" size={23}/><div><h3 id="footer-account-title">Your account</h3><p>{signedIn ? 'Your evenings, menus and receipts, together.' : 'A place for your evenings, menus and receipts.'}</p></div></div>
     <nav aria-label="Footer account"><AccountLinks/></nav>
   </section>
 }
@@ -105,5 +105,5 @@ export function FooterAccount() {
 export function BookingAccountAccess() {
   const { state } = useContext(AccountContext)
   const signedIn = state.kind === 'ready' && state.value.authenticated
-  return <aside className="booking-account-access" aria-labelledby="booking-account-title"><Icon name="book-open" size={23}/><div><h2 id="booking-account-title">Your account, when you need it.</h2><p>Open the bookings and receipts linked to your account. Keep this private link for the current status of this request.</p><a href={accountHref('bookings')}>{signedIn ? 'Open my bookings' : 'Open my account'}<Icon name="arrow-up-right" size={16}/></a></div></aside>
+  return <aside className="booking-account-access" aria-labelledby="booking-account-title"><Icon name="book-open" size={23}/><div><h2 id="booking-account-title">Your account, when you need it.</h2><p>Open the bookings and receipts linked to your account. Keep this private link for the current status of this request.</p><a href={accountHref('bookings')}>{signedIn ? 'Open your evenings' : 'Open my account'}<Icon name="arrow-up-right" size={16}/></a></div></aside>
 }
