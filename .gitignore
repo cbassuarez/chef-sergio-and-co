@@ -1,8 +1,0 @@
-node_modules/
-dist/
-dist-ssr/
-.cache/
-.audit/
-.DS_Store
-.env*
-!.env.example

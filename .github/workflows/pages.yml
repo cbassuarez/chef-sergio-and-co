@@ -1,5 +1,7 @@
 name: Deploy to GitHub Pages
 
+# This site moved to https://chefsergioandco.github.io (source: chefsergioandco/chefsergioandco.github.io).
+# What remains here only forwards old cbassuarez.com/chef-sergio-and-co links to the same page there.
 on:
   push:
     branches: [main]
@@ -19,25 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run check:booking
-      # Watermarked references are committed (public/reference + src/content/reference-credits.json);
-      # check-images.mjs verifies each one's pixel hash, so CI never re-downloads third-party photos.
-      # Prototype until Sergio's decisions and photos are in. Set the repo variable SITE_MODE=production to launch:
-      # that build fails on any open decision, any reference image, or any AI-tagged image.
-      - run: npm run ${{ vars.SITE_MODE == 'production' && 'build:prod' || 'build' }}
-        env:
-          BASE_PATH: ${{ vars.BASE_PATH || '/' }}
-          # Prototype previews only: the preview's own address (e.g. https://name.github.io/repo), so links shared
-          # from it show their share card. Production always uses https://www.chefsergioandco.com.
-          PUBLIC_URL: ${{ vars.PUBLIC_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: moved
 
   deploy:
     needs: build
